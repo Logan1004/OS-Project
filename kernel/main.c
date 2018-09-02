@@ -146,10 +146,360 @@ void Clear()
     console_table[current_console].cursor = 0;
 }
 
-void Calculator(int fd_stdin,int fd_stdout)
-{
+/*****************************************************************************
+ *                               Calculator Begin!
+ *****************************************************************************/
+
+#define MAXSIZE 100
+
+typedef struct {
+    int size;
+    int top;
+    int base;
+    char body[MAXSIZE];
+}opStack;
+typedef struct {
+    int size;
+    int top;
+    int base;
+    int body[MAXSIZE];
+}calStack;
+typedef struct {
+    int size;
+    int top;
+    int base;
+    double body[MAXSIZE];
+}floStack;
+opStack ops;
+calStack cals;
+floStack flo;
+int A[MAXSIZE];
+double B[MAXSIZE];
+void calculate_int();
+void calculate_float();
+void calculator_start(){
+    int i=0;
+    ops.base = -1;
+    ops.size = 0;
+    ops.top = -1;
+
+    cals.base = -1;
+    cals.size = 0;
+    cals.top = -1;
+
+    flo.base = -1;
+    flo.size = 0;
+    flo.top = -1;
+    for(i=0;i<MAXSIZE;i++){
+        A[i] = 0;
+        ops.body[i] = 0;
+        cals.body[i] = 0;
+        flo.body[i] = 0.0;
+    }
+}
+void transform(int fd_stdin, int fd_stdout){
+    char form[MAXSIZE];
+    /***/
+    char ch[100];
+    int r = read(fd_stdin, form, 70);
+    form[r] = 0;
+    /***/
+    int isOver = 0;
+    int i = 0;
+    int j = 0;
+    int isfloat = 0;
+    int isdigit = 0;
+    do{
+        if(form[i]<='9'&&form[i]>='0'){
+            if(isdigit==0){
+                A[j] = form[i]-'0' + 100;
+                i++;j++;
+            }else{
+                A[j-1] = (A[j-1]-100)*10 + form[i]-'0' + 100;
+                i++;
+            }
+            isdigit=1;
+        }else if(form[i]=='+'||form[i]=='-'){
+            isdigit = 0;
+            int flag = 0;
+            while(flag==0){
+                if(ops.size==0||ops.body[ops.top]=='('){
+                    ops.top++;ops.size++;
+                    ops.body[ops.top] = form[i];
+                    flag = 1;
+                }else{
+                    A[j]=ops.body[ops.top];
+                    ops.top--;
+                    ops.size--;
+                    j++;
+                }
+            }
+            i++;
+        }else if(form[i]=='*'||form[i]=='/'){
+            isdigit = 0;
+            int flag = 0;
+            while(flag==0){
+                if(ops.size==0||ops.body[ops.top]=='('||ops.body[ops.top]=='+'||ops.body[ops.top]=='-'){
+                    ops.top++;
+                    ops.body[ops.top] = form[i];
+                    ops.size++;
+                    flag = 1;
+                }else{
+                    A[j]=ops.body[ops.top];
+                    ops.top--;
+                    ops.size--;
+                    j++;
+                }
+            }
+            i++;
+        }else if(form[i]=='('){
+            isdigit = 0;
+            ops.top++;ops.size++;
+            ops.body[ops.top] = form[i];
+            i++;
+        }else if(form[i]==')'){
+            isdigit = 0;
+            while(ops.size!=0&&ops.body[ops.top]!='('){
+                A[j]=ops.body[ops.top];
+                ops.top--;
+                ops.size--;
+                j++;
+            }
+            if(ops.size==0){
+                isOver = 1;
+            }else{
+                ops.top--;
+                ops.size--;
+            }
+            i++;
+        }else if(form[i]=='.'){
+            isfloat++;
+            int k = 1;
+            double index = 0.1;
+            B[isfloat] = A[j-1]-100;
+            A[j-1] = -isfloat;
+            while(form[i+k]<='9'&&form[i+k]>='0'){
+                B[isfloat]= B[isfloat] + index * (form[i+k]-'0');
+                index = index/10.0;
+                k++;
+            }
+            i = i+k;
+        }else{
+            if(ops.size>0){
+                while(ops.size>0){
+                    A[j]=ops.body[ops.top];
+                    ops.top--;
+                    ops.size--;
+                    j++;
+                }
+            }
+            isOver = 1;
+        }
+    }while(isOver==0);
+    A[j] = 0;
+    if(isfloat==0){
+        calculate_int();
+    }else{
+        calculate_float();
+    }
 
 }
+void calculate_float(){
+    int i = 0;
+    int j = 0;
+    int isOver = 0;
+    int isdigit = 0;
+    int error=0;
+    while(isOver==0){
+        if(A[i]>=100){
+            flo.top++;
+            flo.body[flo.top] = A[i]-100;
+            flo.size++;
+        }else if(A[i]<0){
+            flo.top++;
+            flo.body[flo.top] = B[-A[i]];
+            flo.size++;
+        }else{
+            isdigit = 0;
+            switch(A[i]){
+                case '+':
+                    if(flo.size<2){
+                        isOver = 1;
+                        error=1;
+                    }else{
+                        double a = flo.body[flo.top];
+                        flo.top--;flo.size--;
+                        double b = flo.body[flo.top];
+                        flo.body[flo.top] = a + b;
+                    }
+                    break;
+                case '-':
+                    if(flo.size<2){
+                        isOver = 1;error=1;
+                    }else{
+                        double a = flo.body[flo.top];
+                        flo.top--;flo.size--;
+                        double b = flo.body[flo.top];
+                        flo.body[flo.top] = b - a ;
+                    }
+                    break;
+                case '*':
+                    if(flo.size<2){
+                        isOver = 1;error=1;
+                    }else{
+                        double a = flo.body[flo.top];
+                        flo.top--;flo.size--;
+                        double b = flo.body[flo.top];
+                        flo.body[flo.top] = a * b;
+                    }
+                    break;
+                case '/':
+                    if(flo.size<2){
+                        isOver = 1;error=1;
+                    }else{
+                        double a = flo.body[flo.top];
+                        flo.top--;flo.size--;
+                        double b = flo.body[flo.top];
+                        if(a-0<=0.000000001){
+                            printf("    chu 0");
+                        }else{
+                            flo.body[flo.top] = b / a ;
+                        }
+                    }
+                    break;
+                default:
+                    isOver = 1;
+                    break;
+            }
+        }
+        i++;
+    }
+    if(error!=0||flo.size!=1){
+        printf("    -----ERROR-----\n    CAN'T CALCULATE\n    -----ERROR-----\n");
+    }else{
+        printf("    Result is %lf\n",flo.body[flo.top]);
+    }
+}
+void calculate_int(){
+    int i = 0;
+    int j = 0;
+    int isOver = 0;
+    int isdigit = 0;
+    int error=0;
+    while(isOver==0){
+        if(A[i]>=100){
+            cals.top++;
+            cals.body[cals.top]=A[i]-100;
+            cals.size++;
+        }else{
+            isdigit = 0;
+            switch(A[i]){
+                case '+':
+                    if(cals.size<2){
+                        isOver = 1;
+                        error=1;
+                    }else{
+                        int a = cals.body[cals.top];
+                        cals.top--;cals.size--;
+                        int b = cals.body[cals.top];
+                        cals.body[cals.top] = a + b;
+                    }
+                    break;
+                case '-':
+                    if(cals.size<2){
+                        isOver = 1;error=1;
+                    }else{
+                        int a = cals.body[cals.top];
+                        cals.top--;cals.size--;
+                        int b = cals.body[cals.top];
+                        cals.body[cals.top] = b - a;
+                    }
+                    break;
+                case '*':
+                    if(cals.size<2){
+                        isOver = 1;error=1;
+                    }else{
+                        int a = cals.body[cals.top];
+                        cals.top--;cals.size--;
+                        int b = cals.body[cals.top];
+                        cals.body[cals.top] = a * b;
+                    }
+                    break;
+                case '/':
+                    if(cals.size<2){
+                        isOver = 1;error=1;
+                    }else{
+                        int a = cals.body[cals.top];
+                        cals.top--;cals.size--;
+                        int b = cals.body[cals.top];
+                        if(a==0){
+                            printf("    chu 0");
+                        }else{
+                            cals.body[cals.top] = b / a ;
+                        }
+                    }
+                    break;
+                default:
+                    isOver = 1;
+                    break;
+            }
+        }
+        i++;
+    }
+    if(error!=0||cals.size!=1){
+        printf("    -----ERROR-----\n    CAN'T CALCULATE\n    -----ERROR-----\n");
+    }else{
+        printf("    Result is %d\n",cals.body[cals.top]);
+    }
+}
+
+void CalculatorInitial(){
+    printf("                                                                           \n");
+    printf("       ***       ***      *******                                          \n");
+    printf("       ***       ***      *********                Welcome!                \n");
+    printf("         ***    ***       **     **               SHABBY OS                \n");
+    printf("           *** ***        *******              Calculator System           \n");
+    printf("             ***          *******                                          \n");
+    printf("           *** ***        **    ***           by 1652761 Huang Yaoxian     \n");
+    printf("          ***   ***       **      **          by 1652791 Wen Tingjie       \n");
+    printf("        ***      ***      **********          by 1652792 Luo Jihao         \n");
+    printf("        ***      ***      *********                                        \n");
+    printf("                                                                           \n");
+    printf("    ********************************************************************   \n");
+
+    printf("                                   Tips                                    \n");
+    printf("\n");
+    printf("         Enter the formula that needs to be calculated.                    \n");
+    printf("         e.x: Input  :    (5+2)*3                                          \n");
+    printf("         e.x: Output :       21                                            \n");
+    printf("         The formula may contain elements like:                            \n");
+    printf("                + - * / ( ) .  numbers 0~9                                 \n");
+    printf("\n");
+    printf("    ********************************************************************   \n");
+}
+
+void Calculator(int fd_stdin,int fd_stdout)
+{
+    CalculatorInitial();
+    while(1){
+        printf("    Enter the formula : ");
+        calculator_start(); //initialize
+        transform(fd_stdin,fd_stdout);
+        printf("    CONTINUE?(Y/N)");
+        char ch[100];
+        int r = read(fd_stdin, ch, 70);
+        ch[r] = 0;
+        if(ch[0]!='Y'&&ch[0]!='y'){
+            break;
+        }
+    }
+}
+
+/*****************************************************************************
+ *                               Calculator Ends!
+ *****************************************************************************/
+
+
 /*****************************************************************************
  *                               Calendar Begin!
  *****************************************************************************/
@@ -331,6 +681,66 @@ int AllDay(int year ,int month)
     return day;
 }
 
+void JudgeFestival(int month,int day){
+    switch (month)
+    {
+        case 1:switch (day)
+            {
+                default:printf("    not festival");
+            }break;
+        case 2:switch (day)
+            {
+                case 14:printf("    Valentines Day"); break;
+                default:printf("    not festival");
+            }break;
+        case 3:switch (day)
+            {
+                case 8:printf("    Women's Day"); break;
+                case 12:printf("    Arbor Day"); break;
+                default:printf("    not festival");
+            }break;
+        case 4:switch (day)
+            {
+                case 1:printf("    April Fools Day"); break;
+                case 5:printf("    Tomb-sweeping Day"); break;
+                default:printf("    not festival");
+            }break;
+        case 5:switch (day)
+            {
+                case 1:printf("    Labor Day"); break;
+                case 4:printf("    Chinese Youth Day");
+                default:printf("    not festival");
+            }break;
+        case 6:switch (day)
+            {
+                case 1:printf("    Children's Day"); break;
+                default:printf("    not festival");
+            }break;
+        case 8:switch (day)
+            {
+                case 1:printf("    the Army's Day"); break;
+                default:printf("    not festival");
+            }break;
+        case 9:switch (day)
+            {
+                case 10:printf("    Teacher's Day"); break;
+                default:printf("    not festival");
+            }break;
+        case 10:switch (day)
+            {
+                case 1:printf("    National Day"); break;
+                case 31:printf("    Helloween Day"); break;
+                default:printf("    not festival");
+            }break;
+        case 12:switch (day)
+            {
+                case 25:printf("    Christmas Day"); break;
+                default:printf("    not festival");
+            }break;
+    }
+    printf("\n");
+}
+
 void CalendarInitial(){
     printf("                                                                           \n");
     printf("       ***       ***      *******                                          \n");
@@ -431,6 +841,7 @@ void Calendar(int fd_stdin,int fd_stdout){
             printf("    Year = %d   Month = %d   Day = %d is ", year, month, curday);
             weekday = Calculate(year, month);//计算出与基准年月差多少天2018-0101，星期一
             OutputChoice2(weekday, curday);
+            JudgeFestival(month,curday);
         }else{
             printf("    Input Error! Please Check!");
             //choice = 0;
@@ -734,8 +1145,6 @@ void TestC()
 
 void timer(int fd_stdin,int fd_stdout)
 {
-
-
     printf("How many seconds do you want to set?\n");
     char rdbuf[128];
     int tmp = 0;
