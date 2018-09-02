@@ -19,6 +19,7 @@
 
 
 
+
 // end of my code
 
 /*======================================================================*
@@ -149,11 +150,300 @@ void Calculator(int fd_stdin,int fd_stdout)
 {
 
 }
+/*****************************************************************************
+ *                               Calendar Begin!
+ *****************************************************************************/
 
-void Calendar(int fd_stdin,int fd_stdout){
+int AtoiSelf(char *str) {
+    int temp = 0;
+    const char *ptr = str;  //ptr保存str字符串开头
+
+    if (*str == '-' || *str == '+')  //如果第一个字符是正负号，
+    {                      //则移到下一个字符
+        str++;
+    }
+    while (*str != 0) {
+        if ((*str < '0') || (*str > '9'))  //如果当前字符不是数字
+        {                       //则退出循环
+            break;
+        }
+        temp = temp * 10 + (*str - '0'); //如果当前字符是数字则计算数值
+        str++;      //移到下一个字符
+    }
+    if (*ptr == '-')     //如果字符串是以“-”开头，则转换成其相反数
+    {
+        temp = -temp;
+    }
+
+    return temp;
+}
+
+void OutputChoice1(int weekday, int day)
+{
+    int i = 0;
+    int date = 1;
+    int flag = weekday;
+    printf("    Sun  Mon  Tue  Wed  Thu  Fri  Sat\n    ");
+
+    for (i = 0; i < (day + weekday) / 7 + 1; i++)
+    {
+        int j = 0;
+        int k = 0;
+        for (j = 0; j < weekday; j++)
+        {
+            if (flag != 0)
+            {
+                printf("     ");
+            }
+            flag--;
+        }
+        //判断第一天是星期几
+        for (k = 0; k < 7 - weekday; k++)
+        {
+            printf("%2d   ", date);
+            date++;
+            if (date > day)
+                break;
+        }
+        weekday = 0;
+        printf("\n    ");
+    }
+}
+
+void OutputChoice2(int weekday, int curday)
+{
+    int flag = 0;
+    flag = (weekday+curday-1) % 7;
+    switch (flag){
+        case 1:
+            printf("Monday\n");
+            break;
+        case 2:
+            printf("Tuesday\n");
+            break;
+        case 3:
+            printf("Wednesday\n");
+            break;
+        case 4:
+            printf("Thursday\n");
+            break;
+        case 5:
+            printf("Friday\n");
+            break;
+        case 6:
+            printf("Saturday\n");
+            break;
+        case 0:
+            printf("Sunday\n");
+            break;
+        default:
+            break;
+    }
+}
+
+int Calculate(int year, int month)
+{
+    int standardYear = 2018;
+    int i = 0;
+    int sum = 0;//用来保存所输入的日期与基准相差的天数
+    int flag1 = 0;//用来判断闰年二月
+    int flag2 = 0;//用来判断输入年份与基准大小关系
+    int weekday = 0;//用来保存算出来每月第一天是周几
+
+    if (standardYear > year)
+    {
+        standardYear ^= year;
+        year ^= standardYear;
+        standardYear ^= year;
+        flag2 = 1;
+    }
+    //确保standardyear比当前需要查询的year要小
+
+    for (i = standardYear; i < year; i++)
+    {
+        if (((i % 4 == 0) && (i % 100 == 0)) || (i % 400 == 0))
+        {
+            sum = sum + 366;
+            flag1 = 1;
+        }
+        else
+            sum = sum + 365;
+    }//计算出年份与基准年份相差的天数
+
+    for (i = 1; i < month; i++)
+    {
+
+        if ((i == 1) || (i == 3) || (i == 5) || (i == 7)
+            || (i == 8) || (i == 10) || (i == 12))
+        {
+            sum = sum + 31;
+        }
+
+        else if ((i == 2) && (flag1 == 1))
+        {
+            sum = sum + 29;
+        }
+
+        else if ((i == 2) && (flag1 == 0))
+        {
+            sum = sum + 28;
+        }
+        else
+            sum = sum + 30;
+
+    }
+    if (flag2 == 0)
+        weekday = sum % 7 + 1;//加一是由于基准月份第一天是周一
+    else
+        weekday = sum % 7 - 1;//比基准年份小是要减一
+    return weekday;
 
 }
 
+int AllDay(int year ,int month)
+{
+    int flag = 0;
+    int day = 30;
+
+    if (((year % 4 == 0) && (year % 100 == 0)) || (year % 400 == 0))
+    {
+        flag = 1;
+    }
+    //判断闰年
+    if ((month == 1) || (month == 3) || (month == 5) || (month == 7)
+        || (month == 8) || (month == 10) || (month == 12))
+    {
+        day = 31;
+    }
+        //判断大月或小月
+    else if ((month == 2) && (flag == 1))
+    {
+        day = 29;
+    }
+        //闰年的二月
+    else if ((month == 2) && (flag == 0))
+    {
+        day = 28;
+    }
+    else
+        day = 30;
+
+    return day;
+}
+
+void CalendarInitial(){
+    printf("                                                                           \n");
+    printf("       ***       ***      *******                                          \n");
+    printf("       ***       ***      *********                Welcome!                \n");
+    printf("         ***    ***       **     **               SHABBY OS                \n");
+    printf("           *** ***        *******               Calendar System            \n");
+    printf("             ***          *******                                          \n");
+    printf("           *** ***        **    ***                Command List            \n");
+    printf("          ***   ***       **      **             1. Month Search           \n");
+    printf("        ***      ***      **********             2. Day Search             \n");
+    printf("        ***      ***      *********              3. Quit                   \n");
+    printf("                                                                           \n");
+    printf("         Select the number at the begining to choose the function          \n");
+    printf("         e.x: Input  :    1                                                \n");
+    printf("\n");
+    printf("    ********************************************************************   \n");
+}
+
+void Calendar(int fd_stdin,int fd_stdout){
+    CalendarInitial();
+    char rdbuf[128];
+    int r = 0;
+    char choice[128];
+    printf("    Please input your choice: ");
+    r = read(fd_stdin, choice, 70);
+    choice[r] = 0;
+    // printf("%s",choice);
+    while (strcmp(choice,"3")!=0) {
+        char IYear[128]="";
+        char IMonth[128]="";
+        char IDay[128]="";
+        int year = 0;
+        int month = 0;
+        int weekday = 0;//用来保存输入月份第一天是周几
+        int day = 0;//用来保存每月共有多少天
+        if (strcmp(choice,"1")==0) //选择1 按照年月 输出日历
+        {
+            printf("    Please input the year and the month you want to explore:\n");
+            printf("    Please input the year:");
+            r = read(fd_stdin, IYear, 70);
+            IYear[r] = 0;
+            year = AtoiSelf(IYear);
+            printf("    Please input the month:");
+            r = read(fd_stdin, IMonth, 70);
+            IMonth[r] = 0;
+            month = AtoiSelf(IMonth);
+            while (month > 12 || month < 1) {
+                printf("    Input Error! Please Check\n");
+                printf("    Please input the year:");
+                r = read(fd_stdin, IYear, 70);
+                IYear[r] = 0;
+                year = AtoiSelf(IYear);
+                printf("    Please input the month:");
+                r = read(fd_stdin, IMonth, 70);
+                IMonth[r] = 0;
+                month = AtoiSelf(IMonth);
+            }
+            printf("    ============================\n");
+            printf("    Year = %d   Month = %d\n", year, month);
+            weekday = Calculate(year, month);//计算出与基准年月差多少天2018-0101，星期一
+            day = AllDay(year, month);//用来计算每月共有多少天
+            OutputChoice1(weekday, day);
+        }
+        else if (strcmp(choice,"2")==0)//选择2 按照日期 确定周几
+        {
+            int curday = 0;
+            printf("    Please input the date you want to explore:(format: year month day)\n");
+            printf("    Please input the year:");
+            r = read(fd_stdin, IYear, 70);
+            IYear[r] = 0;
+            year = AtoiSelf(IYear);
+            printf("    Please input the month:");
+            r = read(fd_stdin, IMonth, 70);
+            IMonth[r] = 0;
+            month = AtoiSelf(IMonth);
+            printf("    Please input the day:");
+            r = read(fd_stdin, IDay, 70);
+            IDay[r] = 0;
+            curday = AtoiSelf(IDay);
+            //scanf("%d%d%d", &year, &month, &curday);
+            while (month > 12 || month < 1 || curday<1 || curday>31) {
+                printf("    Input Error! Please Check\n");
+                printf("    Please input the date you want to explore:(format: year month day)\n");
+                printf("    Please input the year:");
+                r = read(fd_stdin, IYear, 70);
+                IYear[r] = 0;
+                year = AtoiSelf(IYear);
+                printf("    Please input the month:");
+                r = read(fd_stdin, IMonth, 70);
+                IMonth[r] = 0;
+                month = AtoiSelf(IMonth);
+                printf("    Please input the day:");
+                r = read(fd_stdin, IDay, 70);
+                IDay[r] = 0;
+                curday = AtoiSelf(IDay);
+            }
+            printf("    ================================================\n");
+            printf("    Year = %d   Month = %d   Day = %d is ", year, month, curday);
+            weekday = Calculate(year, month);//计算出与基准年月差多少天2018-0101，星期一
+            OutputChoice2(weekday, curday);
+        }else{
+            printf("    Input Error! Please Check!");
+            //choice = 0;
+        }
+        CalendarInitial();
+        printf("    Please input your choice: ");
+        r = read(fd_stdin, choice, 70);
+        choice[r] = 0;
+    }
+}
+/*****************************************************************************
+ *                               Calendar ends!
+ *****************************************************************************/
 void G3(int fd_stdin,int fd_stdout){
 
 }
