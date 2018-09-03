@@ -128,6 +128,296 @@ PUBLIC int get_ticks()
                                TestA
  *======================================================================*/
 
+void HelloInitial(){
+    long int ii = 9999;
+    printf("                                                                           \n");while(ii-->0);ii=9999;
+
+    printf("    ##      ###\n");
+    printf("    ##      ###\n");
+    printf("    ##      ###\n");
+    printf("    ##      ###\n");
+    printf("    ##      ###\n");
+    printf("    ##      ###\n");
+    printf("    ##      ###\n");
+    printf("    ##      ###\n");
+    printf("    ###########\n");
+    printf("    ###########\n");
+    printf("    ##      ###\n");
+    printf("    ##      ###\n");
+    printf("    ##      ###\n");
+    printf("    ##      ###\n");
+    printf("    ##      ###\n");
+    printf("    ##      ###\n");
+    printf("    ##      ###\n");
+    printf("    ##      ###\n");
+    printf("               \n\n");
+    milli_delay(1000);
+    Clear();
+    printf("    ##      ###              \n");
+    printf("    ##      ###              \n");
+    printf("    ##      ###              \n");
+    printf("    ##      ###              \n");
+    printf("    ##      ###              \n");
+    printf("    ##      ###              \n");
+    printf("    ##      ###      #####   \n");
+    printf("    ##      ###     ######## \n");
+    printf("    ###########    ###   ####\n");
+    printf("    ###########   ###     ###\n");
+    printf("    ##      ###  ###      ###\n");
+    printf("    ##      ###  ############\n");
+    printf("    ##      ###  ###         \n");
+    printf("    ##      ###  ###         \n");
+    printf("    ##      ###   ###     ###\n");
+    printf("    ##      ###   ####    ###\n");
+    printf("    ##      ###    ####  ####\n");
+    printf("    ##      ###     ######## \n");
+    printf("                      ####   \n\n");
+    milli_delay(1000);
+    Clear();
+    printf("    ##      ###                     ###\n");
+    printf("    ##      ###                     ###\n");
+    printf("    ##      ###                     ###\n");
+    printf("    ##      ###                     ###\n");
+    printf("    ##      ###                     ###\n");
+    printf("    ##      ###                     ###\n");
+    printf("    ##      ###      #####          ###\n");
+    printf("    ##      ###     ########        ###\n");
+    printf("    ###########    ###  #####       ###\n");
+    printf("    ###########   ###     ###       ###\n");
+    printf("    ##      ###  ###      ###       ###\n");
+    printf("    ##      ###  ############       ###\n");
+    printf("    ##      ###  ###                ###\n");
+    printf("    ##      ###  ###                ###\n");
+    printf("    ##      ###   ###     ###       ###\n");
+    printf("    ##      ###   ####    ###       ###\n");
+    printf("    ##      ###    ####  ####       ###\n");
+    printf("    ##      ###     ########        ###\n");
+    printf("                      ####          ###\n\n");
+    milli_delay(1000);
+    Clear();
+
+    printf("    ##      ###                     ###           ###\n");
+    printf("    ##      ###                     ###           ###\n");
+    printf("    ##      ###                     ###           ###\n");
+    printf("    ##      ###                     ###           ###\n");
+    printf("    ##      ###                     ###           ###\n");
+    printf("    ##      ###                     ###           ###\n");
+    printf("    ##      ###      #####          ###           ###\n");
+    printf("    ##      ###     ########        ###           ###\n");
+    printf("    ###########    ###  #####       ###           ###\n");
+    printf("    ###########   ###     ###       ###           ###\n");
+    printf("    ##      ###  ###      ###       ###           ###\n");
+    printf("    ##      ###  ############       ###           ###\n");
+    printf("    ##      ###  ###                ###           ###\n");
+    printf("    ##      ###  ###                ###           ###\n");
+    printf("    ##      ###   ###     ###       ###           ###\n");
+    printf("    ##      ###   ####    ###       ###           ###\n");
+    printf("    ##      ###    ####  ####       ###           ###\n");
+    printf("    ##      ###     ########        ###           ###\n");
+    printf("                      ###           ###           ###\n\n");
+    milli_delay(1000);
+    Clear();
+    printf("    ##      ###                     ###           ###                      \n");
+    printf("    ##      ###                     ###           ###                      \n");
+    printf("    ##      ###                     ###           ###                      \n");
+    printf("    ##      ###                     ###           ###                      \n");
+    printf("    ##      ###                     ###           ###                      \n");
+    printf("    ##      ###                     ###           ###                      \n");
+    printf("    ##      ###      #####          ###           ###           ####       \n");
+    printf("    ##      ###     ########        ###           ###         ########     \n");
+    printf("    ###########    ###  #####       ###           ###        ###    ###    \n");
+    printf("    ###########   ###     ###       ###           ###       ###      ###   \n");
+    printf("    ##      ###  ###      ###       ###           ###       ###      ###   \n");
+    printf("    ##      ###  ############       ###           ###       ###      ###   \n");
+    printf("    ##      ###  ###                ###           ###       ###      ###   \n");
+    printf("    ##      ###  ###                ###           ###       ###      ###   \n");
+    printf("    ##      ###   ###     ###       ###           ###       ###      ###   \n");
+    printf("    ##      ###   ####    ###       ###           ###       ####    ####   \n");
+    printf("    ##      ###    ####  ####       ###           ###        ####  ####    \n");
+    printf("    ##      ###     ########        ###           ###         ########     \n");
+    printf("                      ###           ###           ###           ####       \n\n");
+
+    startAnimate();
+}
+
+void LoadingInitial(){
+    long int ii = 9999;
+    printf("                                                                           \n");while(ii-->0);ii=9999;
+
+    printf("    ##          \n");
+    printf("    ##          \n");
+    printf("    ##          \n");
+    printf("    ##          \n");
+    printf("    ##          \n");
+    printf("    ##          \n");
+    printf("    ##          \n");
+    printf("    ##          \n");
+    printf("    ########    \n");
+    printf("    ########    \n");
+    milli_delay(1000);
+    Clear();
+    printf("    ##       #######  \n");
+    printf("    ##       #######  \n");
+    printf("    ##       ##   ##  \n");
+    printf("    ##       ##   ##  \n");
+    printf("    ##       ##   ##  \n");
+    printf("    ##       ##   ##  \n");
+    printf("    ##       ##   ##  \n");
+    printf("    ##       ##   ##  \n");
+    printf("    ######## #######  \n");
+    printf("    ######## #######  \n");
+    milli_delay(1000);
+    Clear();
+    printf("    ##       #######     ##      \n");
+    printf("    ##       #######    ####     \n");
+    printf("    ##       ##   ##   ##  ##    \n");
+    printf("    ##       ##   ##  ##    ##   \n");
+    printf("    ##       ##   ##  #########  \n");
+    printf("    ##       ##   ##  #########  \n");
+    printf("    ##       ##   ##  ###   ###  \n");
+    printf("    ##       ##   ##  ###   ###  \n");
+    printf("    ######## #######  ###   ###  \n");
+    printf("    ######## #######  ###   ###  \n");
+    milli_delay(1000);
+    Clear();
+    printf("    ##       #######     ##      #####     \n");
+    printf("    ##       #######    ####     ######    \n");
+    printf("    ##       ##   ##   ##  ##    ##   ##   \n");
+    printf("    ##       ##   ##  ##    ##   ##    ##  \n");
+    printf("    ##       ##   ##  #########  ##     ## \n");
+    printf("    ##       ##   ##  #########  ##     ## \n");
+    printf("    ##       ##   ##  ###   ###  ##     ## \n");
+    printf("    ##       ##   ##  ###   ###  ##   ##   \n");
+    printf("    ######## #######  ###   ###  ######    \n");
+    printf("    ######## #######  ###   ###  ####      \n");
+    milli_delay(1000);
+    Clear();
+    printf("    ##       #######     ##      #####     ####  \n");
+    printf("    ##       #######    ####     ######     ##   \n");
+    printf("    ##       ##   ##   ##  ##    ##   ##    ##   \n");
+    printf("    ##       ##   ##  ##    ##   ##    ##   ##   \n");
+    printf("    ##       ##   ##  #########  ##     ##  ##   \n");
+    printf("    ##       ##   ##  #########  ##     ##  ##   \n");
+    printf("    ##       ##   ##  ###   ###  ##     ##  ##   \n");
+    printf("    ##       ##   ##  ###   ###  ##   ##    ##   \n");
+    printf("    ######## #######  ###   ###  ######     ##   \n");
+    printf("    ######## #######  ###   ###  ####      ####  \n");
+    milli_delay(1000);
+    Clear();
+    printf("    ##       #######     ##      #####     ####  ####    ##  \n");
+    printf("    ##       #######    ####     ######     ##   ####    ##  \n");
+    printf("    ##       ##   ##   ##  ##    ##   ##    ##   ## ##   ##  \n");
+    printf("    ##       ##   ##  ##    ##   ##    ##   ##   ##  ##  ##  \n");
+    printf("    ##       ##   ##  #########  ##     ##  ##   ##  ##  ##  \n");
+    printf("    ##       ##   ##  #########  ##     ##  ##   ##   ## ##  \n");
+    printf("    ##       ##   ##  ###   ###  ##     ##  ##   ##   ## ##  \n");
+    printf("    ##       ##   ##  ###   ###  ##   ##    ##   ##    ####  \n");
+    printf("    ######## #######  ###   ###  ######     ##   ##    ####  \n");
+    printf("    ######## #######  ###   ###  ####      ####  ##    ####  \n");
+    milli_delay(1000);
+    Clear();
+
+    printf("    ##       #######     ##      #####     ####  ####    ##   ##########   \n");
+    printf("    ##       #######    ####     ######     ##   ####    ##   ##########   \n");
+    printf("    ##       ##   ##   ##  ##    ##   ##    ##   ## ##   ##   ##           \n");
+    printf("    ##       ##   ##  ##    ##   ##    ##   ##   ##  ##  ##   ##           \n");
+    printf("    ##       ##   ##  #########  ##     ##  ##   ##  ##  ##   ##           \n");
+    printf("    ##       ##   ##  #########  ##     ##  ##   ##   ## ##   ##   #####   \n");
+    printf("    ##       ##   ##  ###   ###  ##     ##  ##   ##   ## ##   ##   #####   \n");
+    printf("    ##       ##   ##  ###   ###  ##   ##    ##   ##    ####   ##    # ##   \n");
+    printf("    ######## #######  ###   ###  ######     ##   ##    ####   ####### ##   \n");
+    printf("    ######## #######  ###   ###  ####      ####  ##    ####   ####### ##   \n\n");
+
+    startAnimate();
+}
+
+void CommonInitial(int year,int month,int day){
+    char cMonth[128]="";
+    char cDay[128]="";
+    switch (month){
+        case 1:
+            strcpy( cMonth, "Janauary");
+            break;
+        case 2:
+            strcpy( cMonth, "February");
+            break;
+        case 3:
+            strcpy( cMonth, "March");
+            break;
+        case 4:
+            strcpy( cMonth, "April");
+            break;
+        case 5:
+            strcpy( cMonth, "May");
+            break;
+        case 6:
+            strcpy( cMonth, "June");
+            break;
+        case 7:
+            strcpy( cMonth, "July");
+            break;
+        case 8:
+            strcpy( cMonth, "August");
+            break;
+        case 9:
+            strcpy( cMonth, "September");
+            break;
+        case 10:
+            strcpy( cMonth, "Octorber");
+            break;
+        case 11:
+            strcpy( cMonth, "November");
+            break;
+        case 12:
+            strcpy( cMonth, "December");
+            break;
+    }
+    int weekday = Calculate(year, month);//计算出与基准年月差多少天2018-0101，星期一
+    int flag = 0;
+    flag = (weekday+day-1) % 7;
+    switch (flag){
+        case 1:
+            strcpy( cDay, "Monday");
+            break;
+        case 2:
+            strcpy( cDay, "Tuesday");
+            break;
+        case 3:
+            strcpy( cDay, "Wednesday");
+            break;
+        case 4:
+            strcpy( cDay, "Thursday");
+            break;
+        case 5:
+            strcpy( cDay, "Friday");
+            break;
+        case 6:
+            strcpy( cDay, "Saturday");
+            break;
+        case 0:
+            strcpy( cDay, "Sunday");
+            break;
+        default:
+            break;
+    }
+    printf("                                                                           \n");
+    printf("       ***       ***      *******                                          \n");
+    printf("       ***       ***      *********                Welcome!                \n");
+    printf("         ***    ***       **     **               SHABBY OS                \n");
+    printf("           *** ***        *******                                          \n");
+    printf("             ***          *******                                          \n");
+    printf("           *** ***        **    ***           by 1652761 Huang Yaoxian     \n");
+    printf("          ***   ***       **      **          by 1652791 Wen Tingjie       \n");
+    printf("        ***      ***      **********          by 1652792 Luo Jihao         \n");
+    printf("        ***      ***      *********                                        \n");
+    printf("                                                                           \n");
+    printf("                        Input [help] for more information                  \n");
+    printf("                                                                           \n");
+    printf("    ********************************************************************   \n");
+    printf("                           %s,%s %d,%d\n",cDay,cMonth,day,year);
+    printf("    ********************************************************************   \n");
+}
+
 void clearArr(char *arr, int length)
 {
     int i;
@@ -147,7 +437,7 @@ void Clear()
 }
 
 /*****************************************************************************
- *                               Calculator Begin!
+ *                            计算机  Calculator Begin!
  *****************************************************************************/
 
 #define MAXSIZE 100
@@ -496,12 +786,12 @@ void Calculator(int fd_stdin,int fd_stdout)
 }
 
 /*****************************************************************************
- *                               Calculator Ends!
+ *                       计算机 Calculator Ends!
  *****************************************************************************/
 
 
 /*****************************************************************************
- *                               Calendar Begin!
+ *                        日历 Calendar Begin!
  *****************************************************************************/
 
 int AtoiSelf(char *str) {
@@ -728,7 +1018,7 @@ void JudgeFestival(int month,int day){
             }break;
         case 10:switch (day)
             {
-                case 1:printf("    National Day"); break;
+                case 1: printf("    National Day"); break;
                 case 31:printf("    Helloween Day"); break;
                 default:printf("    not festival");
             }break;
@@ -759,7 +1049,7 @@ void CalendarInitial(){
     printf("    ********************************************************************   \n");
 }
 
-void Calendar(int fd_stdin,int fd_stdout){
+void Calendar(int fd_stdin,int fd_stdout,int todayYear,int todayMonth,int todayDay){
     CalendarInitial();
     char rdbuf[128];
     int r = 0;
@@ -843,7 +1133,8 @@ void Calendar(int fd_stdin,int fd_stdout){
             OutputChoice2(weekday, curday);
             JudgeFestival(month,curday);
         }else{
-            printf("    Input Error! Please Check!");
+            printf("    Input Error! Please Check!\n");
+            printf("    Today is %d/%d/%d",todayYear,todayMonth,todayDay);
             //choice = 0;
         }
         CalendarInitial();
@@ -853,11 +1144,105 @@ void Calendar(int fd_stdin,int fd_stdout){
     }
 }
 /*****************************************************************************
- *                               Calendar ends!
+ *                            日历   Calendar ends!
  *****************************************************************************/
-void G3(int fd_stdin,int fd_stdout){
 
+/*****************************************************************************
+ *                            时钟   Clock Begins!
+ *****************************************************************************/
+
+int hour = 0;
+int minute = 0;
+int second = 0;
+
+void Timer(int fd_stdin,int fd_stdout)
+{
+    printf("    Seconds Input:");
+    char rdbuf[128];
+    int r = read(fd_stdin, rdbuf, 70);
+    rdbuf[r] = 0;
+    int i = AtoiSelf(rdbuf);
+    printf("    The time you set is %d\n    Now begin....\n",i);
+    for(;i >=0;i--){
+        printf("    %d  Left\n",i);
+        milli_delay(15000);
+    }
+    printf("    Time up!\n");
 }
+
+void ClockInitial(){
+    printf("                                                                           \n");
+    printf("       ***       ***      *******                                          \n");
+    printf("       ***       ***      *********                Welcome!                \n");
+    printf("         ***    ***       **     **               SHABBY OS                \n");
+    printf("           *** ***        *******                Clock System              \n");
+    printf("             ***          *******                                          \n");
+    printf("           *** ***        **    ***                Command List            \n");
+    printf("          ***   ***       **      **             1. Show Current Time      \n");
+    printf("        ***      ***      **********             2. Timer                  \n");
+    printf("        ***      ***      *********              3. Quit                   \n");
+    printf("                                                                           \n");
+    printf("         Select the number at the begining to choose the function          \n");
+    printf("         e.x: Input  :    1                                                \n");
+    printf("\n");
+    printf("    ********************************************************************   \n");
+}
+
+void TimerInitial(){
+    printf("                                                                           \n");
+    printf("       ***       ***      *******                                          \n");
+    printf("       ***       ***      *********                                        \n");
+    printf("         ***    ***       **     **                                        \n");
+    printf("           *** ***        *******                   Welcome                \n");
+    printf("             ***          *******                                          \n");
+    printf("           *** ***        **    ***                SHABBY OS               \n");
+    printf("          ***   ***       **      **                                       \n");
+    printf("        ***      ***      **********                 Timer                 \n");
+    printf("        ***      ***      *********                                        \n");
+    printf("                                                                           \n");
+    printf("         Enter the seconds to count:                                       \n");
+    printf("         e.x: Input  :    60                                               \n");
+    printf("\n");
+    printf("    ********************************************************************   \n");
+}
+
+void Clock(int fd_stdin,int fd_stdout){
+
+    ClockInitial();
+    char rdbuf[128];
+    int r = 0;
+    char choice[128];
+    printf("    Please input your choice: ");
+    r = read(fd_stdin, choice, 70);
+    choice[r] = 0;
+    // printf("%s",choice);
+    while (strcmp(choice,"3")!=0) {
+        if (strcmp(choice,"1")==0) //选择1 时钟
+        {
+            if (hour==0 && minute==0 && second==0){
+                printf("    Please first turn on the time machine!\n");
+                printf("    Enter: Ctrl+F2 then enter Time Machine\n");
+            }else{
+                printf("    Current time is %d : %d : %d\n", hour, minute, second);
+            }
+        }else if (strcmp(choice,"2")==0){
+            Clear();
+            TimerInitial();
+            Timer(fd_stdin,fd_stdout);
+        }else{
+            printf("    Input Error! Please Check!\n");
+        }
+        printf("    ********************************************************************   \n");
+        ClockInitial();
+        printf("    Please input your choice: ");
+        r = read(fd_stdin, choice, 70);
+        choice[r] = 0;
+    }
+}
+
+/*****************************************************************************
+ *                            时钟   Clock ends!
+ *****************************************************************************/
 
 void G4(int fd_stdin,int fd_stdout){
 
@@ -897,6 +1282,10 @@ void Help()
     printf("    ********************************************************************   \n");
 }
 
+int tYear = 0;
+int tMonth = 0;
+int tDay = 0;
+
 void TestA()
 {
     int fd;
@@ -916,116 +1305,8 @@ void TestA()
     const char bufw[80] = {0};
 
     Clear();
-    long int ii = 9999;
-    printf("                                                                           \n");while(ii-->0);ii=9999;
 
-    printf("    ##      ###\n");
-    printf("    ##      ###\n");
-    printf("    ##      ###\n");
-    printf("    ##      ###\n");
-    printf("    ##      ###\n");
-    printf("    ##      ###\n");
-    printf("    ##      ###\n");
-    printf("    ##      ###\n");
-    printf("    ###########\n");
-    printf("    ###########\n");
-    printf("    ##      ###\n");
-    printf("    ##      ###\n");
-    printf("    ##      ###\n");
-    printf("    ##      ###\n");
-    printf("    ##      ###\n");
-    printf("    ##      ###\n");
-    printf("    ##      ###\n");
-    printf("    ##      ###\n");
-    printf("               \n\n");
-    milli_delay(1000);
-    Clear();
-    printf("    ##      ###              \n");
-    printf("    ##      ###              \n");
-    printf("    ##      ###              \n");
-    printf("    ##      ###              \n");
-    printf("    ##      ###              \n");
-    printf("    ##      ###              \n");
-    printf("    ##      ###      #####   \n");
-    printf("    ##      ###     ######## \n");
-    printf("    ###########    ###   ####\n");
-    printf("    ###########   ###     ###\n");
-    printf("    ##      ###  ###      ###\n");
-    printf("    ##      ###  ############\n");
-    printf("    ##      ###  ###         \n");
-    printf("    ##      ###  ###         \n");
-    printf("    ##      ###   ###     ###\n");
-    printf("    ##      ###   ####    ###\n");
-    printf("    ##      ###    ####  ####\n");
-    printf("    ##      ###     ######## \n");
-    printf("                      ####   \n\n");
-    milli_delay(1000);
-    Clear();
-    printf("    ##      ###                     ###\n");
-    printf("    ##      ###                     ###\n");
-    printf("    ##      ###                     ###\n");
-    printf("    ##      ###                     ###\n");
-    printf("    ##      ###                     ###\n");
-    printf("    ##      ###                     ###\n");
-    printf("    ##      ###      #####          ###\n");
-    printf("    ##      ###     ########        ###\n");
-    printf("    ###########    ###  #####       ###\n");
-    printf("    ###########   ###     ###       ###\n");
-    printf("    ##      ###  ###      ###       ###\n");
-    printf("    ##      ###  ############       ###\n");
-    printf("    ##      ###  ###                ###\n");
-    printf("    ##      ###  ###                ###\n");
-    printf("    ##      ###   ###     ###       ###\n");
-    printf("    ##      ###   ####    ###       ###\n");
-    printf("    ##      ###    ####  ####       ###\n");
-    printf("    ##      ###     ########        ###\n");
-    printf("                      ####          ###\n\n");
-    milli_delay(1000);
-    Clear();
-
-    printf("    ##      ###                     ###           ###\n");
-    printf("    ##      ###                     ###           ###\n");
-    printf("    ##      ###                     ###           ###\n");
-    printf("    ##      ###                     ###           ###\n");
-    printf("    ##      ###                     ###           ###\n");
-    printf("    ##      ###                     ###           ###\n");
-    printf("    ##      ###      #####          ###           ###\n");
-    printf("    ##      ###     ########        ###           ###\n");
-    printf("    ###########    ###  #####       ###           ###\n");
-    printf("    ###########   ###     ###       ###           ###\n");
-    printf("    ##      ###  ###      ###       ###           ###\n");
-    printf("    ##      ###  ############       ###           ###\n");
-    printf("    ##      ###  ###                ###           ###\n");
-    printf("    ##      ###  ###                ###           ###\n");
-    printf("    ##      ###   ###     ###       ###           ###\n");
-    printf("    ##      ###   ####    ###       ###           ###\n");
-    printf("    ##      ###    ####  ####       ###           ###\n");
-    printf("    ##      ###     ########        ###           ###\n");
-    printf("                      ###           ###           ###\n\n");
-    milli_delay(1000);
-    Clear();
-    printf("    ##      ###                     ###           ###                      \n");
-    printf("    ##      ###                     ###           ###                      \n");
-    printf("    ##      ###                     ###           ###                      \n");
-    printf("    ##      ###                     ###           ###                      \n");
-    printf("    ##      ###                     ###           ###                      \n");
-    printf("    ##      ###                     ###           ###                      \n");
-    printf("    ##      ###      #####          ###           ###           ####       \n");
-    printf("    ##      ###     ########        ###           ###         ########     \n");
-    printf("    ###########    ###  #####       ###           ###        ###    ###    \n");
-    printf("    ###########   ###     ###       ###           ###       ###      ###   \n");
-    printf("    ##      ###  ###      ###       ###           ###       ###      ###   \n");
-    printf("    ##      ###  ############       ###           ###       ###      ###   \n");
-    printf("    ##      ###  ###                ###           ###       ###      ###   \n");
-    printf("    ##      ###  ###                ###           ###       ###      ###   \n");
-    printf("    ##      ###   ###     ###       ###           ###       ###      ###   \n");
-    printf("    ##      ###   ####    ###       ###           ###       ####    ####   \n");
-    printf("    ##      ###    ####  ####       ###           ###        ####  ####    \n");
-    printf("    ##      ###     ########        ###           ###         ########     \n");
-    printf("                      ###           ###           ###           ####       \n\n");
-
-
-    startAnimate();
+    HelloInitial();
 
     Clear();
     printf("                                                                           \n");
@@ -1043,7 +1324,40 @@ void TestA()
     printf("                                                                           \n");
     printf("    ********************************************************************   \n");
 
+    int curYear  = 0;
+    int curMonth = 0;
+    int curDay   = 0;
+    int firstTimeFlag = 0;
     while (1) {
+        if (firstTimeFlag==0){
+            int t;
+            printf("System Initialzation~\n");
+            printf("Date Initialzation\n");
+            printf("Enter the current year(e.x. 2018):");
+            t = read(fd_stdin, rdbuf, 70);
+            rdbuf[t] = 0;
+            curYear = AtoiSelf(rdbuf);
+            tYear = curYear;
+            clearArr(rdbuf,128);
+            printf("Enter the current month(e.x. 10):");
+            t = read(fd_stdin, rdbuf, 70);
+            rdbuf[t] = 0;
+            curMonth = AtoiSelf(rdbuf);
+            tMonth = curMonth;
+            clearArr(rdbuf,128);
+            printf("Enter the current day(e.x. 4):");
+            t = read(fd_stdin, rdbuf, 70);
+            rdbuf[t] = 0;
+            curDay = AtoiSelf(rdbuf);
+            tDay = curDay;
+            clearArr(rdbuf,128);
+            firstTimeFlag = 1;
+            Clear();
+            LoadingInitial();
+            Clear();
+            CommonInitial(curYear,curMonth,curDay);
+        }
+
         printf("\n\n\n OS:");
         clearArr(rdbuf,128);
         //清空数据，初始化，存放新的数据
@@ -1062,20 +1376,7 @@ void TestA()
         }
         else if (strcmp(rdbuf, "clear") == 0){
             Clear();
-            printf("                                                                           \n");
-            printf("       ***       ***      *******                                          \n");
-            printf("       ***       ***      *********                Welcome!                \n");
-            printf("         ***    ***       **     **               SHABBY OS                \n");
-            printf("           *** ***        *******                                          \n");
-            printf("             ***          *******                                          \n");
-            printf("           *** ***        **    ***           by 1652761 Huang Yaoxian     \n");
-            printf("          ***   ***       **      **          by 1652791 Wen Tingjie       \n");
-            printf("        ***      ***      **********          by 1652792 Luo Jihao         \n");
-            printf("        ***      ***      *********                                        \n");
-            printf("                                                                           \n");
-            printf("                        Input [help] for more information                  \n");
-            printf("                                                                           \n");
-            printf("    ********************************************************************   \n");
+            CommonInitial(curYear,curMonth,curDay);
             continue;
         }
         else if (strcmp(rdbuf, "help") == 0){
@@ -1089,12 +1390,12 @@ void TestA()
             continue;
         }
         else if (strcmp(rdbuf, "G2") == 0 || strcmp(rdbuf,"G2:Calendar")==0 || strcmp(rdbuf,"Calendar")==0){
-            Calendar(fd_stdin,fd_stdout);
+            Calendar(fd_stdin,fd_stdout,curYear,curMonth,curDay);
             //printf("G2");
             continue;
         }
-        else if (strcmp(rdbuf, "G3") == 0){
-            G3(fd_stdin,fd_stdout);
+        else if (strcmp(rdbuf, "G3") == 0 || strcmp(rdbuf,"G3:Clock")==0 || strcmp(rdbuf,"Clock")==0){
+            Clock(fd_stdin,fd_stdout);
             //printf("G3");
             continue;
         }
@@ -1129,37 +1430,162 @@ void TestA()
 /*======================================================================*
                                TestB
  *======================================================================*/
-void TestB()
-{
-    spin("TestB");
+void ClockShow(int hour,int minute,int second){
+    char cMonth[128]="";
+    char cDay[128]="";
+    switch (tMonth){
+        case 1:
+            strcpy( cMonth, "Janauary");
+            break;
+        case 2:
+            strcpy( cMonth, "February");
+            break;
+        case 3:
+            strcpy( cMonth, "March");
+            break;
+        case 4:
+            strcpy( cMonth, "April");
+            break;
+        case 5:
+            strcpy( cMonth, "May");
+            break;
+        case 6:
+            strcpy( cMonth, "June");
+            break;
+        case 7:
+            strcpy( cMonth, "July");
+            break;
+        case 8:
+            strcpy( cMonth, "August");
+            break;
+        case 9:
+            strcpy( cMonth, "September");
+            break;
+        case 10:
+            strcpy( cMonth, "Octorber");
+            break;
+        case 11:
+            strcpy( cMonth, "November");
+            break;
+        case 12:
+            strcpy( cMonth, "December");
+            break;
+    }
+    int weekday = Calculate(tYear, tMonth);//计算出与基准年月差多少天2018-0101，星期一
+    int flag = 0;
+    flag = (weekday+tDay-1) % 7;
+    switch (flag){
+        case 1:
+            strcpy( cDay, "Monday");
+            break;
+        case 2:
+            strcpy( cDay, "Tuesday");
+            break;
+        case 3:
+            strcpy( cDay, "Wednesday");
+            break;
+        case 4:
+            strcpy( cDay, "Thursday");
+            break;
+        case 5:
+            strcpy( cDay, "Friday");
+            break;
+        case 6:
+            strcpy( cDay, "Saturday");
+            break;
+        case 0:
+            strcpy( cDay, "Sunday");
+            break;
+        default:
+            break;
+    }
+    printf("                                                                           \n");
+    printf("       ***       ***      *******                                          \n");
+    printf("       ***       ***      *********                Welcome!                \n");
+    printf("         ***    ***       **     **               SHABBY OS                \n");
+    printf("           *** ***        *******                Time System               \n");
+    printf("             ***          *******                                          \n");
+    printf("           *** ***        **    ***           by 1652761 Huang Yaoxian     \n");
+    printf("          ***   ***       **      **          by 1652791 Wen Tingjie       \n");
+    printf("        ***      ***      **********          by 1652792 Luo Jihao         \n");
+    printf("        ***      ***      *********                                        \n");
+    printf("                                                                           \n");
+    printf("      Initial Time : %s,%s %d,%d   %d : %d : %d\n",cDay,cMonth,tDay,tYear,hour,minute,second);
+    printf("    *********************   Time   Machine  Begins      ****************   \n");
+    printf("    ********************************************************************   \n");
+}
+
+
+void TestB() {
+
+    char rdbuf[128];
+    char tty_name[] = "/dev_tty1";
+    int fd_stdin = open(tty_name, O_RDWR);
+    assert(fd_stdin == 0);
+    int fd_stdout = open(tty_name, O_RDWR);
+    assert(fd_stdout == 1);
+
+    Clear();
+
+    int r = read(fd_stdin, rdbuf, 70);
+    rdbuf[r] = 0;
+    if (strcmp(rdbuf, "Time Machine") == 0) {
+
+        printf("Please enter initial time:\n");
+        printf("Please enter hour:");
+        r = read(fd_stdin, rdbuf, 70);
+        rdbuf[r] = 0;
+        hour = AtoiSelf(rdbuf);
+        printf("Please enter minute:");
+        r = read(fd_stdin, rdbuf, 70);
+        rdbuf[r] = 0;
+        minute = AtoiSelf(rdbuf);
+        printf("Please enter second:");
+        r = read(fd_stdin, rdbuf, 70);
+        rdbuf[r] = 0;
+        second = AtoiSelf(rdbuf);
+        ClockShow(hour, minute, second);
+
+        while (1) {
+            second += 1;
+            if (second >= 60) {
+                second = 0;
+                minute += 1;
+            }
+            if (minute >= 60) {
+                minute = 0;
+                hour += 1;
+            }
+            if (hour >= 24) {
+                hour = 0;
+                tDay += 1;
+            }
+            milli_delay(15000);
+            //printf("    Current time is %d : %d : %d\n", hour, minute, second);
+            //clearArr(rdbuf, r);
+        }
+    }
+    else{
+        printf("    Input Error! Please Check!\n");
+    }
+
+    //Clear();
+    //ClockShow(hour,minute,second);
+
+
 }
 
 /*****************************************************************************
  *                                TestC
  *****************************************************************************/
+
+
 void TestC()
 {
-    //ProcessManage();
-    spin("Testc");
+    spin("TestC");
 }
 
-void timer(int fd_stdin,int fd_stdout)
-{
-    printf("How many seconds do you want to set?\n");
-    char rdbuf[128];
-    int tmp = 0;
-    int r = read(fd_stdin, rdbuf, 70);
-    rdbuf[r] = 0;
-    atoi(rdbuf,&tmp);
 
-    int i = tmp;
-    printf("the time you set is %d\nNow begin....\n",tmp);
-    for(;i >=0;i--){
-        printf("%d left\n",i);
-        milli_delay(10000);
-    }
-    printf("Time up!");
-}
 
 void startAnimate(){
     long int ii = 9999;
