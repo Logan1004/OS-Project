@@ -427,6 +427,33 @@ void clearArr(char *arr, int length)
 
 void ProcessManage(){
 
+    int i;
+    printf("                                                                           \n");
+    printf("       ***       ***      *******                                          \n");
+    printf("       ***       ***      *********                                        \n");
+    printf("         ***    ***       **     **                                        \n");
+    printf("           *** ***        *******                   Welcome                \n");
+    printf("             ***          *******                                          \n");
+    printf("           *** ***        **    ***                SHABBY OS               \n");
+    printf("          ***   ***       **      **                                       \n");
+    printf("        ***      ***      **********             Process Manage            \n");
+    printf("        ***      ***      *********                                        \n");
+    printf("                                                                           \n");
+    printf("                                                \n");
+    printf("    ********************************************************************   \n");
+
+    printf("=============================================================================\n");
+    printf("   ProcessID   |   ProcessName   |   ProcessPriority   |   Running?\n");
+    //进程号，进程名，优先级，是否是系统进程，是否在运行
+    printf("-----------------------------------------------------------------------------\n");
+    for ( i = 0 ; i < NR_TASKS + NR_PROCS ; ++i )//逐个遍历
+    {
+//		if ( proc_table[i].priority == 0) continue;//系统资源跳过
+        printf("    %d             %s                %d                    yes\n", proc_table[i].pid, proc_table[i].name, proc_table[i].priority);
+    }
+    printf("=============================================================================\n");
+
+
 }
 
 void Clear()
@@ -1221,7 +1248,7 @@ void Clock(int fd_stdin,int fd_stdout){
         {
             if (hour==0 && minute==0 && second==0){
                 printf("    Please first turn on the time machine!\n");
-                printf("    Enter: Ctrl+F2 then enter Time Machine\n");
+                printf("    Enter: Ctrl+F2 then enter Time Machine");
             }else{
                 printf("    Current time is %d : %d : %d\n", hour, minute, second);
             }
