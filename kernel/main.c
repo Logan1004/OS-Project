@@ -5,6 +5,7 @@
                                                     Forrest Yu, 2005
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
+
 #include "type.h"
 #include "stdio.h"
 #include "const.h"
@@ -439,7 +440,9 @@ void ProcessManage(){
     printf("        ***      ***      **********             Process Manage            \n");
     printf("        ***      ***      *********                                        \n");
     printf("                                                                           \n");
-    printf("                                                \n");
+    printf("         Enter the seconds to count:                                       \n");
+    printf("         e.x: Input  :    60                                               \n");
+    printf("\n");
     printf("    ********************************************************************   \n");
 
     printf("=============================================================================\n");
@@ -1271,14 +1274,480 @@ void Clock(int fd_stdin,int fd_stdout){
  *                            时钟   Clock ends!
  *****************************************************************************/
 
-void G4(int fd_stdin,int fd_stdout){
+/*****************************************************************************
+ *                            走迷宫  Maze Begin!
+ *****************************************************************************/
+int len;
+int map[17][17]={0};
+int routine[17][17]={0};
+
+int x[128]={0};
+int y[128]={0};
+int t=0;
+
+char routineEasy[128] = "( 2 , 1 ) ->( 2 , 2 ) ->( 2 , 3 ) ->( 2 , 4 ) ->( 3 , 4 ) ->( 4 , 4 )";
+char routineDifficult[1000] = "( 2 , 2 ) ->( 3 , 2 ) ->( 3 , 3 ) ->( 3 , 4 ) ->( 2 , 4 ) ->( 1 , 4 ) ->\n( 1 , 5 ) ->( 1 , 6 ) ->( 1 , 7 ) ->( 1 , 8 ) ->( 1 , 9 ) ->( 1 , 10 ) ->\n( 1 , 11 ) ->( 1 , 12 ) ->( 1 , 13 ) ->( 1 , 14 ) ->( 1 , 15 ) ->( 2 , 15 ) ->\n( 3 , 15 ) ->( 3 , 14 ) ->( 3 , 13 ) ->( 3 , 12 ) ->( 3 , 11 ) ->( 3 , 10 ) ->\n( 3 , 9 ) ->( 3 , 8 ) ->( 3 , 7 ) ->( 3 , 6 ) ->( 4 , 6 ) ->( 5 , 6 ) ->\n( 6 , 6 ) ->( 7 , 6 ) ->( 8 , 6 ) ->( 8 , 7 ) ->( 8 , 8 ) ->( 7 , 8 ) ->\n( 6 , 8 ) ->( 6 , 9 ) ->( 6 , 10 ) ->( 7 , 10 ) ->( 8 , 10 ) ->( 9 , 10 ) ->\n( 10 , 10 ) ->( 11 , 10 ) ->( 11 , 9 ) ->( 11 , 8 ) ->( 11 , 7 ) ->( 11 , 6 ) ->\n( 11 , 5 ) ->( 11 , 4 ) ->( 10 , 4 ) ->( 9 , 4 ) ->( 8 , 4 ) ->( 8 , 3 ) ->\n( 8 , 2 ) ->( 9 , 2 ) ->( 10 , 2 ) ->( 11 , 2 ) ->( 12 , 2 ) ->( 13 , 2 ) ->\n( 14 , 2 ) ->( 14 , 3 ) ->( 14 , 4 ) ->( 14 , 5 ) ->( 14 , 6 ) ->( 14 , 7 ) ->\n( 14 , 8 ) ->( 14 , 9 ) ->( 14 , 10 ) ->( 14 , 11 ) ->( 14 , 12 ) ->( 14 , 13 ) ->\n( 14 , 14 ) ->( 15 , 14 )\n";
+
+int mapComplex[17][17] = {
+        {2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2},
+        {2,1,4,1,0,0,0,0,0,0,0,0,0,0,0,0,2},
+        {2,1,0,1,0,1,1,1,1,1,1,1,1,1,1,0,2},
+        {2,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,2},
+        {2,1,0,0,1,1,0,1,1,0,0,0,0,0,1,1,2},
+        {2,1,0,0,0,1,0,1,1,1,1,1,0,0,1,1,2},
+        {2,1,0,1,0,1,0,1,0,0,0,1,0,0,1,1,2},
+        {2,1,1,1,1,1,0,1,0,1,0,1,0,1,1,1,2},
+        {2,1,0,0,0,1,0,0,0,1,0,1,0,1,0,1,2},
+        {2,1,0,1,0,1,1,1,1,1,0,1,0,0,0,1,2},
+        {2,1,0,1,0,1,1,1,1,1,0,1,1,1,0,1,2},
+        {2,1,0,1,0,0,0,0,0,0,0,1,0,0,0,1,2},
+        {2,1,0,1,0,0,1,1,0,0,1,0,0,1,1,1,2},
+        {2,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,2},
+        {2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2},
+        {2,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,2},
+        {2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2}
+};
+int mapEasy[6][6] = {
+        {2,2,2,2,2,2},
+        {2,4,1,0,1,2},
+        {2,0,0,0,0,2},
+        {2,1,0,1,0,2},
+        {2,1,1,1,3,2},
+        {2,2,2,2,2,2},
+};
+void DrawMap(){
+    for(int i=0;i<len;i++)
+    {
+        for(int j=0;j<len;j++)
+        {
+            switch(map[i][j])
+            {
+                case 0:
+                    printf(" ");
+                    break;
+                case 1:
+                    printf("#");
+                    break;
+                case 2:
+                    printf("*");
+                    break;
+                case 3:
+                    printf("D");
+                    break;
+                case 4:
+                    printf("@");
+                    break;
+            }
+        }
+        printf("\n");    //分行输出
+    }
+
+}
+void InitialMap(){
+    for (int i=0;i<17;i++){
+        for (int j=0;i<17;i++) {
+            map[i][j] = 0;
+            routine[i][j] = 0;
+        }
+    }
+    for (int i=0;i<128;i++){
+        x[i]=0;
+        y[i]=0;
+    }
+    t=0;
+}
+
+void MazeGame(int fd_stdin,int fd_stdout) {
+    int px, py;
+    char method[128] = "";
+    char rdbuf[128] = "";
+
+    InitialMap();
+    printf("    Choose the method easy or difficult:");
+    int r = read(fd_stdin, method, 70);
+    method[r] = 0;
+
+    if (strcmp(method, "easy") == 0) {
+        len = 6;
+        for (int i = 0; i < 6; i++)
+            for (int j = 0; j < 6; j++)
+                map[i][j] = mapEasy[i][j];
+    } else {
+        len = 17;
+        for (int i = 0; i < 17; i++)
+            for (int j = 0; j < 17; j++)
+                map[i][j] = mapComplex[i][j];
+    }
+
+    while (1) {
+        int flag = 0;
+        Clear();
+        printf("\n");
+        DrawMap();
+        for (px = 0; px < len; px++) {
+            for (py = 0; py < len; py++) {
+                if (map[px][py] == 4)
+                    break;
+            }
+            if (map[px][py] == 4)
+                break;
+        }
+        routine[px][py] = 1;
+        printf("CURRENT LOCATION (%d,%d)", px, py);
+        printf("\n");
+        printf("Please input direction:");
+        char control;
+
+        r = read(fd_stdin, rdbuf, 70);
+        rdbuf[r] = 0;
+        control = rdbuf[0];
+
+        if (control == 'Q' || control == 'q') {
+            break;
+        }
+        switch (control) {
+            case 'w':
+                if (map[px - 1][py] == 0) {
+                    map[px - 1][py] = 4;
+                    map[px][py] = 0;
+                    px = px - 1;
+                    routine[px][py] = 1;
+
+                    x[t] = px;
+                    y[t] = py;
+                    t++;
+
+                } else if (map[px - 1][py] == 1 || map[px - 1][py] == 2) {
+                    continue;
+                } else if (map[px - 1][py] == 3) {
+                    flag = 1;
+                    map[px - 1][py] = 4;
+                    map[px][py] = 0;
+                    px = px - 1;
+                    routine[px][py] = 1;
+
+                    x[t] = px;
+                    y[t] = py;
+                    t++;
+
+                }
+                break;
+            case 's':
+                if (map[px + 1][py] == 0) {
+                    map[px + 1][py] = 4;
+                    map[px][py] = 0;
+                    px = px + 1;
+                    routine[px][py] = 1;
+
+                    x[t] = px;
+                    y[t] = py;
+                    t++;
+
+                } else if (map[px + 1][py] == 1 || map[px + 1][py] == 2) {
+                    continue;
+                } else if (map[px + 1][py] == 3) {
+                    flag = 1;
+                    map[px + 1][py] = 4;
+                    map[px][py] = 0;
+                    px = px + 1;
+                    routine[px][py] = 1;
+
+                    x[t] = px;
+                    y[t] = py;
+                    t++;
+
+                }
+                break;
+            case 'a':
+                if (map[px][py - 1] == 0) {
+                    map[px][py - 1] = 4;
+                    map[px][py] = 0;
+                    py = py - 1;
+                    routine[px][py] = 1;
+
+                    x[t] = px;
+                    y[t] = py;
+                    t++;
+
+                } else if (map[px][py - 1] == 1 || map[px][py - 1] == 2) {
+                    continue;
+                } else if (map[px][py - 1] == 3) {
+                    flag = 1;
+                    map[px][py - 1] = 4;
+                    map[px][py] = 0;
+                    py = py - 1;
+                    routine[px][py] = 1;
+
+                    x[t] = px;
+                    y[t] = py;
+                    t++;
+
+                }
+                break;
+            case 'd':
+                if (map[px][py + 1] == 0) {
+                    map[px][py + 1] = 4;
+                    map[px][py] = 0;
+                    py = py + 1;
+                    routine[px][py] = 1;
+
+                    x[t] = px;
+                    y[t] = py;
+                    t++;
+
+                } else if (map[px][py + 1] == 1 || map[px][py + 1] == 2) {
+                    continue;
+                } else if (map[px][py + 1] == 3) {
+                    flag = 1;
+                    map[px][py + 1] = 4;
+                    map[px][py] = 0;
+                    py = py + 1;
+                    routine[px][py] = 1;
+
+                    x[t] = px;
+                    y[t] = py;
+                    t++;
+
+                }
+                break;
+            default:
+                continue;
+        }
+        if (flag == 1) {
+            printf("Congratulation!\n");
+
+            printf("Your rountine : \n");
+            printf("\n");
+            for (int i = 0; i < len; i++) {
+                for (int j = 0; j < len; j++) {
+                    if (routine[i][j] == 1)
+                        printf(".");
+                    else {
+                        switch (map[i][j]) {
+                            case 0:
+                                printf(" ");
+                                break;
+                            case 1:
+                                printf("#");
+                                break;
+                            case 2:
+                                printf("*");
+                                break;
+                            case 3:
+                                printf("D");
+                                break;
+                            case 4:
+                                printf("@");
+                                break;
+                        }
+                    }
+
+                }
+                printf("\n");
+            }
+
+            for (int i = 0; i < t; i++) {
+                if (i % 6 == 0) printf("\n");
+                if (i == t - 1) printf("( %d , %d )", x[i], y[i]);
+                else printf("( %d , %d ) ->", x[i], y[i]);
+
+            }
+            printf("\n");
+            printf("\n");
+            printf("The Best Routine: \n");
+            if (len == 6) {
+                printf("%s\n", routineEasy);
+            } else {
+                printf("%s\n", routineDifficult);
+            }
+            printf("Input any key to continue: \n");
+            r = read(fd_stdin, rdbuf, 70);
+            rdbuf[r] = 0;
+            Clear();
+            break;
+        }
+    }
+}
+
+
+
+void MazeInitial(){
+    printf("                                                                           \n");
+    printf("       ***       ***      *******                                          \n");
+    printf("       ***       ***      *********                 Welcome!               \n");
+    printf("         ***    ***       **     **                SHABBY OS               \n");
+    printf("           *** ***        *******                    Maze                  \n");
+    printf("             ***          *******                                          \n");
+    printf("           *** ***        **    ***                Command List            \n");
+    printf("          ***   ***       **      **             1. Start Maze Game        \n");
+    printf("        ***      ***      **********             2. Maze Solving           \n");
+    printf("        ***      ***      *********              3. Quit                   \n");
+    printf("                                                                           \n");
+    printf("         Select the number at the begining to choose the function          \n");
+    printf("         e.x: Input  :    1                                                \n");
+    printf("         Tips: Do not enter the commands too fast. It may clush !          \n");
+    printf("\n");
+    printf("    ********************************************************************   \n");
+}
+
+void MazeGameInitial(){
+    printf("                                                                           \n");
+    printf("       ***       ***      *******                                          \n");
+    printf("       ***       ***      *********                 Welcome!               \n");
+    printf("         ***    ***       **     **                SHABBY OS               \n");
+    printf("           *** ***        *******                 Maze   Game              \n");
+    printf("             ***          *******                                          \n");
+    printf("           *** ***        **    ***           by 1652761 Huang Yaoxian     \n");
+    printf("          ***   ***       **      **          by 1652791 Wen Tingjie       \n");
+    printf("        ***      ***      **********          by 1652792 Luo Jihao         \n");
+    printf("        ***      ***      *********                                        \n");
+    printf("                                                                           \n");
+    printf("    ********************************************************************   \n");
+
+    printf("                                   Tips                                    \n");
+    printf("\n");
+    printf("         Use w a s d to control the movement.                              \n");
+    printf("         e.x: Input  :       w                                             \n");
+    printf("         w : Going up   s:  Going down   a:  Going left   d:Going right    \n");
+    printf("\n");
+    printf("    ********************************************************************   \n");
+}
+
+void MazeSolvingInitial(){
+    printf("                                                                           \n");
+    printf("       ***       ***      *******                                          \n");
+    printf("       ***       ***      *********                Welcome!                \n");
+    printf("         ***    ***       **     **               SHABBY OS                \n");
+    printf("           *** ***        *******                Maze Solving              \n");
+    printf("             ***          *******                                          \n");
+    printf("           *** ***        **    ***           by 1652761 Huang Yaoxian     \n");
+    printf("          ***   ***       **      **          by 1652791 Wen Tingjie       \n");
+    printf("        ***      ***      **********          by 1652792 Luo Jihao         \n");
+    printf("        ***      ***      *********                                        \n");
+    printf("                                                                           \n");
+    printf("    ********************************************************************   \n");
+
+    printf("                                   Tips                                    \n");
+    printf("\n");
+    printf("         Input the maze and the system will calculate the answer.          \n");
+    printf("         The maze should be at the size of 5*5                             \n");
+    printf("         You can use 1 on behalf of wall and 0 on behalf of way            \n");
+    printf("         The entrance is at 0,0 and the exit is at 4,4                     \n");
+    printf("\n");
+    printf("    ********************************************************************   \n");
+}
+
+#define LEN 5
+
+char mazeSolving[LEN][LEN];                 //构建迷宫
+
+int start_x = 0, start_y = 0;               //设置起点
+int end_x = 4, end_y = 4;                   //设置终点
+int flagSolving=0;
+
+void print_maze()
+{
+    int x, y;
+
+    for(x = 0; x < LEN; x++)
+    {
+        printf("    ");
+        for(y = 0; y < LEN; y++)
+        {
+            if(mazeSolving[x][y] == '2')
+                printf("#");
+            else if(mazeSolving[x][y] == '1')
+                printf("*");
+            else if(mazeSolving[x][y] == '0')
+                printf(".");
+        }
+        printf("\n");
+    }
+
+    printf("\n");
+}
+
+void step(int x, int y)                //用递归算法求解路径
+{
+    mazeSolving[x][y] = '2';
+
+    if(x == end_x && y == end_y)
+    {
+        print_maze();                //打印函数放入递归中，每找到一条成功路径打印一次
+        flagSolving=1;
+    }
+
+    if (flagSolving!=1) {
+        if (y < (LEN - 1) && mazeSolving[x][y + 1] == '0') { step(x, y + 1); }           //边界条件，避免溢出
+        if (x < (LEN - 1) && mazeSolving[x + 1][y] == '0') { step(x + 1, y); }
+        if (y > 0 && mazeSolving[x][y - 1] == '0') { step(x, y - 1); }
+        if (x > 0 && mazeSolving[x - 1][y] == '0') { step(x - 1, y); }
+
+        mazeSolving[x][y] = '0';
+    }
+}
+
+void MazeSolving(int fd_stdin,int fd_stdout) {
+    Clear();
+    MazeSolvingInitial();
+    char tt[128];
+    printf("    Press any key to continue~");
+    int T = read(fd_stdin, tt, 70);
+
+    Clear();
+    for (int i = 0; i < 5; i++) {
+        printf("    ");
+        char ttemp[128];
+        int r = read(fd_stdin, ttemp, 70);
+        ttemp[r] = '\0';
+        for (int j=0;j<5;j++)
+        mazeSolving[i][j] = ttemp[j];
+    }
+    printf("    Your initial Map is:\n");
+    print_maze();
+
+    step(start_x, start_y);
+    if (flagSolving==0) printf("    No Way\n");
+    printf("    Press any key to continue~");
+    T = read(fd_stdin, tt, 70);
+}
+
+void Maze(int fd_stdin,int fd_stdout) {
+    MazeInitial();
+    char rdbuf[128];
+    int r = 0;
+    char choice[128];
+    printf("    Please input your choice: ");
+    r = read(fd_stdin, choice, 70);
+    choice[r] = 0;
+    // printf("%s",choice);
+    while (strcmp(choice,"3")!=0) {
+        if (strcmp(choice,"1")==0) //选择1 开始游戏
+        {
+            MazeGameInitial();
+            printf("    Press any key to continue...\n");
+            r = read(fd_stdin, choice, 70);
+            MazeGame(fd_stdin,fd_stdout);
+        } if (strcmp(choice,"2")==0){
+            MazeSolving(fd_stdin,fd_stdout);
+        }else{
+            printf("    Input Error! Please Check!\n");
+        }
+        printf("    ********************************************************************   \n");
+        MazeInitial();
+        printf("    Please input your choice: ");
+        r = read(fd_stdin, choice, 70);
+        choice[r] = 0;
+    }
 
 }
 
-//void show()
-//{
-//	printf("%d  %d  %d  %d",console_table[current_console].con_size, console_table[current_console].crtc_start, console_table[current_console].cursor, console_table[current_console].orig);
-//}
+
+
+/*****************************************************************************
+ *                            走迷宫  Maze Ends!
+ *****************************************************************************/
+
 
 void Help()
 {
@@ -1303,8 +1772,8 @@ void Help()
     printf("         4. help                        Display Information                \n");
     printf("         5. G1:Calculator               Run an easy Calculator             \n");
     printf("         6. G2:Calendar                 Run a simple Calendar              \n");
-    printf("         7. G3                          Uncertain                          \n");
-    printf("         8. G4                          Uncertain                          \n");
+    printf("         7. G3:Clock                    Run a simple Clock                 \n");
+    printf("         8. G4:Maze                     Play a Maze game                   \n");
     printf("\n");
     printf("    ********************************************************************   \n");
 }
@@ -1426,8 +1895,8 @@ void TestA()
             //printf("G3");
             continue;
         }
-        else if (strcmp(rdbuf, "G4") == 0){
-            G4(fd_stdin,fd_stdout);
+        else if (strcmp(rdbuf, "G4") == 0 || strcmp(rdbuf,"G4:Maze")==0 || strcmp(rdbuf,"Maze")==0){
+            Maze(fd_stdin,fd_stdout);
             //printf("G4");
             continue;
         }else{
