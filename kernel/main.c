@@ -490,13 +490,14 @@ typedef struct {
     int base;
     double body[MAXSIZE];
 }floStack;
-opStack ops;
-calStack cals;
-floStack flo;
+opStack ops;//存放计算符 
+calStack cals;//存放数字 
+floStack flo;//存放浮点数 
 int A[MAXSIZE];
 double B[MAXSIZE];
 void calculate_int();
 void calculate_float();
+//初始化计算器 
 void calculator_start(){
     int i=0;
     ops.base = -1;
@@ -527,11 +528,11 @@ void transform(int fd_stdin, int fd_stdout){
     int isOver = 0;
     int i = 0;
     int j = 0;
-    int isfloat = 0;
-    int isdigit = 0;
+    int isfloat = 0;//判断是否存在浮点数 
+    int isdigit = 0;//多位数字的判断 
     do{
         if(form[i]<='9'&&form[i]>='0'){
-            if(isdigit==0){
+            if(isdigit==0){//判断上一个符号是否为数字，是则为同一个数 
                 A[j] = form[i]-'0' + 100;
                 i++;j++;
             }else{
@@ -624,6 +625,7 @@ void transform(int fd_stdin, int fd_stdout){
     }
 
 }
+//浮点计算 
 void calculate_float(){
     int i = 0;
     int j = 0;
@@ -631,11 +633,11 @@ void calculate_float(){
     int isdigit = 0;
     int error=0;
     while(isOver==0){
-        if(A[i]>=100){
+        if(A[i]>=100){//当前为数字，且为整数 
             flo.top++;
             flo.body[flo.top] = A[i]-100;
             flo.size++;
-        }else if(A[i]<0){
+        }else if(A[i]<0){//为数字，且为浮点数 
             flo.top++;
             flo.body[flo.top] = B[-A[i]];
             flo.size++;
@@ -700,6 +702,7 @@ void calculate_float(){
         printf("    Result is %lf\n",flo.body[flo.top]);
     }
 }
+//整数计算 
 void calculate_int(){
     int i = 0;
     int j = 0;
