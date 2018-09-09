@@ -32,7 +32,8 @@ OBJS		= kernel/kernel.o lib/syscall.o kernel/start.o kernel/main.o\
 			lib/printf.o lib/vsprintf.o\
 			lib/kliba.o lib/klib.o lib/string.o lib/misc.o\
 			lib/open.o lib/read.o lib/write.o lib/close.o lib/unlink.o\
-			lib/getpid.o lib/syslog.o\
+			lib/getpid.o lib/syslog.o lib/myTest.o lib/ls.o\
+			lib/mkdir.o lib/touch.o lib/rm.o lib/cd.o\
 			fs/main.o fs/open.o fs/misc.o fs/read_write.o\
 			fs/link.o\
 			fs/disklog.o
@@ -156,6 +157,24 @@ lib/getpid.o: lib/getpid.c
 	$(CC) $(CFLAGS) -o $@ $<
 
 lib/syslog.o: lib/syslog.c
+	$(CC) $(CFLAGS) -o $@ $<
+
+lib/myTest.o: lib/myTest.c
+	$(CC) $(CFLAGS) -o $@ $<
+
+lib/ls.o: lib/ls.c
+	$(CC) $(CFLAGS) -o $@ $<
+
+lib/mkdir.o: lib/mkdir.c
+	$(CC) $(CFLAGS) -o $@ $<
+
+lib/touch.o: lib/touch.c
+	$(CC) $(CFLAGS) -o $@ $<
+
+lib/rm.o: lib/rm.c
+	$(CC) $(CFLAGS) -o $@ $<
+
+lib/cd.o: lib/cd.c
 	$(CC) $(CFLAGS) -o $@ $<
 
 fs/main.o: fs/main.c

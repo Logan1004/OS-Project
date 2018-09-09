@@ -78,18 +78,25 @@ PUBLIC struct super_block *	get_super_block(int dev);
 /* fs/open.c */
 PUBLIC int		do_open();
 PUBLIC int		do_close();
+PUBLIC int		do_ls();
+PUBLIC int		do_mkdir();
+PUBLIC int		do_touch();
 
 /* fs/read_write.c */
 PUBLIC int		do_rdwt();
 
 /* fs/link.c */
 PUBLIC int		do_unlink();
+PUBLIC int 		do_rm();
 
 /* fs/misc.c */
 PUBLIC int		do_stat();
 PUBLIC int		strip_path(char * filename, const char * pathname,
 				   struct inode** ppinode);
 PUBLIC int		search_file(char * path);
+PUBLIC int		search_file_in_dir(char * filename, struct inode* dir_inode);
+PUBLIC int 		search_file_by_path(char* path);
+PUBLIC int 		do_cd();
 
 /* fs/disklog.c */
 PUBLIC int		do_disklog();

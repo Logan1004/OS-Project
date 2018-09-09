@@ -466,6 +466,13 @@ void Clear()
     console_table[current_console].cursor = 0;
 }
 
+void ClearByIndex(int index)
+{
+    clear_screen(0,console_table[index].cursor);
+    console_table[index].crtc_start = 0;
+    console_table[index].cursor = 0;
+}
+
 /*****************************************************************************
  *                            计算机  Calculator Begin!
  *****************************************************************************/
@@ -1704,7 +1711,7 @@ void MazeSolving(int fd_stdin,int fd_stdout) {
         int r = read(fd_stdin, ttemp, 70);
         ttemp[r] = '\0';
         for (int j=0;j<5;j++)
-        mazeSolving[i][j] = ttemp[j];
+            mazeSolving[i][j] = ttemp[j];
     }
     printf("    Your initial Map is:\n");
     print_maze();
@@ -1781,12 +1788,100 @@ void Help()
     printf("    ********************************************************************   \n");
 }
 
+/*****************************************************************************
+ *                            Filemanager Begins!
+ *****************************************************************************/
+
+void FileManager(int fd_stdin,int fd_stdout)
+{
+    char curpath[128];
+    curpath[0]='/';
+    curpath[1]=0;
+
+    char rdbuf[128];
+    char cmd[20];
+    char para[100];
+
+
+
+    while (1) {
+        printl("%s:  ", curpath);
+        clearArr(rdbuf,128);
+        int r=read(fd_stdin, rdbuf, 128);
+        rdbuf[r]=0;
+
+        char* lo=rdbuf;
+        char* hi=lo;
+        while(*hi){
+            if(*hi==' '){
+                memcpy(cmd, lo, hi-lo);
+                cmd[hi-lo]=0;
+                hi++; lo=hi;
+                break;
+            }
+            else
+                hi++;
+        }
+        if(hi!=lo){
+            memcpy(cmd, lo, hi-lo);
+            cmd[hi-lo]=0;
+            //lo=hi;
+            para[0]=0;
+        }
+        else{
+            while(*hi)
+                hi++;
+            memcpy(para, lo, hi-lo);
+            para[hi-lo]=0;
+        }
+
+        //printf("%s\n", cmd);
+        //printf("%s\n", para);
+        if(strcmp(cmd,"ls")==0){
+            //printf("dols\n");
+            ls("666");
+        }
+        else if(strcmp(cmd, "touch")==0){
+            //printf("dotouch\n");
+            touch(para);
+        }
+        else if(strcmp(cmd, "mkdir")==0){
+            //printf("domkdir\n");
+            mkdir(para);
+        }
+        else if(strcmp(cmd, "rm")==0){
+            //printf("dorm\n");
+            rm(para);
+        }
+        else if(strcmp(cmd, "cd")==0){
+            //printf("docd\n");
+            memcpy(curpath, para, strlen(para));
+            curpath[strlen(para)]=0;
+            cd(para);
+        }else if (strcmp(cmd, "quit")==0) {
+            break;
+        }
+    }
+
+
+
+}
+
+
+
+
+/*****************************************************************************
+ *                            Filemanager Ends!
+ *****************************************************************************/
+
+
 int tYear = 0;
 int tMonth = 0;
 int tDay = 0;
 
 void TestA()
 {
+    //while(1){}
     int fd;
     int i, n;
 
@@ -1808,6 +1903,7 @@ void TestA()
     HelloInitial();
 
     Clear();
+    //ls("root");
     printf("                                                                           \n");
     printf("       ***       ***      *******                                          \n");
     printf("       ***       ***      *********                Welcome!                \n");
@@ -1869,8 +1965,11 @@ void TestA()
         }
         else if (strcmp(rdbuf, "filemng") == 0)
         {
-            printf("File Manager is already running on CONSOLE-1 ! \n");
-            //printf("filemng");
+            Clear();
+            int flagFile = 1;
+            //while (flagFile == 1) {
+            FileManager(fd_stdin,fd_stdout);
+
             continue;
         }
         else if (strcmp(rdbuf, "clear") == 0){
@@ -2017,15 +2116,76 @@ void ClockShow(int hour,int minute,int second){
 
 void TestB() {
 
+    //milli_delay(100000);
+    char curpath[128];
+    curpath[0]='/';
+    curpath[1]=0;
+
     char rdbuf[128];
+    char cmd[20];
+    char para[100];
     char tty_name[] = "/dev_tty1";
     int fd_stdin = open(tty_name, O_RDWR);
     assert(fd_stdin == 0);
     int fd_stdout = open(tty_name, O_RDWR);
     assert(fd_stdout == 1);
+/*
 
-    Clear();
+    while (1) {
+	printl("%s:  ", curpath);
+	int r=read(fd_stdin, rdbuf, 128);
+	rdbuf[r]=0;
 
+	char* lo=rdbuf;
+	char* hi=lo;
+	while(*hi){
+		if(*hi==' '){
+			memcpy(cmd, lo, hi-lo);
+			cmd[hi-lo]=0;
+			hi++; lo=hi;
+			break;
+		}
+		else
+			hi++;
+	}
+	if(hi!=lo){
+		memcpy(cmd, lo, hi-lo);
+		cmd[hi-lo]=0;
+		//lo=hi;
+		para[0]=0;
+	}
+	else{
+		while(*hi)
+			hi++;
+		memcpy(para, lo, hi-lo);
+		para[hi-lo]=0;
+	}
+
+	//printf("%s\n", cmd);
+	//printf("%s\n", para);
+	if(strcmp(cmd,"ls")==0){
+		//printf("dols\n");
+		ls("666");
+	}
+	else if(strcmp(cmd, "touch")==0){
+		//printf("dotouch\n");
+		touch(para);
+	}
+	else if(strcmp(cmd, "mkdir")==0){
+		//printf("domkdir\n");
+		mkdir(para);
+	}
+	else if(strcmp(cmd, "rm")==0){
+		//printf("dorm\n");
+		rm(para);
+	}
+	else if(strcmp(cmd, "cd")==0){
+		//printf("docd\n");
+		memcpy(curpath, para, strlen(para));
+		curpath[strlen(para)]=0;
+		cd(para);
+	}
+    }*/
     int r = read(fd_stdin, rdbuf, 70);
     rdbuf[r] = 0;
     if (strcmp(rdbuf, "Time Machine") == 0) {

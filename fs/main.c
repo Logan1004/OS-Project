@@ -63,6 +63,21 @@ PUBLIC void task_fs()
 		case RESUME_PROC:
 			src = fs_msg.PROC_NR;
 			break;
+		case LS:
+            		fs_msg.RETVAL = do_ls();
+			break;
+		case MKDIR:
+			fs_msg.RETVAL=do_mkdir();
+			break;
+		case TOUCH:
+			fs_msg.RETVAL=do_touch();
+			break;
+		case RM:
+			fs_msg.RETVAL=do_rm();
+			break;
+		case CD:
+			fs_msg.RETVAL=do_cd();
+			break;
 		/* case LSEEK: */
 		/* 	fs_msg.OFFSET = do_lseek(); */
 		/* 	break; */
@@ -81,38 +96,38 @@ PUBLIC void task_fs()
 			break;
 		}
 
-#ifdef ENABLE_DISK_LOG
-		char * msg_name[128];
-		msg_name[OPEN]   = "OPEN";
-		msg_name[CLOSE]  = "CLOSE";
-		msg_name[READ]   = "READ";
-		msg_name[WRITE]  = "WRITE";
-		msg_name[LSEEK]  = "LSEEK";
-		msg_name[UNLINK] = "UNLINK";
+//#ifdef ENABLE_DISK_LOG
+//		char * msg_name[128];
+//		msg_name[OPEN]   = "OPEN";
+//		msg_name[CLOSE]  = "CLOSE";
+//		msg_name[READ]   = "READ";
+//		msg_name[WRITE]  = "WRITE";
+//		msg_name[LSEEK]  = "LSEEK";
+//		msg_name[UNLINK] = "UNLINK";
 		/* msg_name[FORK]   = "FORK"; */
 		/* msg_name[EXIT]   = "EXIT"; */
 		/* msg_name[STAT]   = "STAT"; */
 
-		switch (msgtype) {
-		case CLOSE:
-		case UNLINK:
-			//dump_fd_graph("%s just finished.", msg_name[msgtype]);
-			//panic("");
-		case OPEN:
-		case READ:
-		case WRITE:
-		/* case FORK: */
-		/* case LSEEK: */
-		/* case EXIT: */
-		/* case STAT: */
-			break;
-		case RESUME_PROC:
-		case DISK_LOG:
-			break;
-		default:
-			assert(0);
-		}
-#endif
+//		switch (msgtype) {
+//		case CLOSE:
+//		case UNLINK:
+//			//dump_fd_graph("%s just finished.", msg_name[msgtype]);
+//			//panic("");
+//		case OPEN:
+//		case READ:
+//		case WRITE:
+//		/* case FORK: */
+//		/* case LSEEK: */
+//		/* case EXIT: */
+//		/* case STAT: */
+//			break;
+//		case RESUME_PROC:
+//		case DISK_LOG:
+//			break;
+//		default:
+//			assert(0);
+//		}
+//#endif
 
 		/* reply */
 		if (fs_msg.type != SUSPEND_PROC) {
@@ -158,7 +173,7 @@ PRIVATE void init_fs()
 
 	sb = (struct super_block *)fsbuf;
 	if (sb->magic != MAGIC_V1) {
-		printl("{FS} mkfs\n");
+		while(1){printl("{FS} mkfs\n");}
 		mkfs(); /* make FS */
 	}
 
@@ -169,6 +184,7 @@ PRIVATE void init_fs()
 	assert(sb->magic == MAGIC_V1);
 
 	root_inode = get_inode(ROOT_DEV, ROOT_INODE);
+	cur_inode=root_inode;
 
 }
 
@@ -432,6 +448,7 @@ PUBLIC struct super_block * get_super_block(int dev)
  *****************************************************************************/
 PUBLIC struct inode * get_inode(int dev, int num)
 {
+	//printl("want to get inode %d\n", num);
 	if (num == 0)
 		return 0;
 
