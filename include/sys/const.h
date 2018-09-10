@@ -140,7 +140,7 @@ enum msgtype {
 	GET_TICKS, GET_PID,
 
 	/* FS */
-	OPEN, CLOSE, READ, WRITE, LSEEK, STAT, UNLINK, LS, MKDIR, TOUCH, RM, CD, 
+	OPEN, CLOSE, READ, WRITE, LSEEK, STAT, UNLINK, LS, MKDIR, TOUCH, RM, CD, MV, CP, 
 
 	/* FS & TTY */
 	SUSPEND_PROC, RESUME_PROC,
@@ -165,6 +165,7 @@ enum msgtype {
 #define FILENAME	u.m3.m3p3
 #define	FLAGS		u.m3.m3i1
 #define	NAME_LEN	u.m3.m3i2
+#define PATH_LEN	u.m3.m3i5
 #define	CNT		u.m3.m3i2
 #define	REQUEST		u.m3.m3i2
 #define	PROC_NR		u.m3.m3i3

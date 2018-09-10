@@ -30,15 +30,15 @@
  * 
  * @return File descriptor if successful, otherwise -1.
  *****************************************************************************/
-PUBLIC int open(const char *pathname, int flags)
+PUBLIC int open(const char* filename, int flags)
 {
 	MESSAGE msg;
 
 	msg.type	= OPEN;
 
-	msg.PATHNAME	= (void*)pathname;
+	msg.FILENAME	= (void*)filename;
 	msg.FLAGS	= flags;
-	msg.NAME_LEN	= strlen(pathname);
+	msg.NAME_LEN	= strlen(filename);
 
 	send_recv(BOTH, TASK_FS, &msg);
 	assert(msg.type == SYSCALL_RET);

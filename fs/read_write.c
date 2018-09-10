@@ -49,6 +49,9 @@ PUBLIC int do_rdwt()
 	int pos = pcaller->filp[fd]->fd_pos;
 
 	struct inode * pin = pcaller->filp[fd]->fd_inode;
+	//printl("****************\n");
+	//printl("%d\n", pin->i_num);
+	//printl("****************\n");
 
 	assert(pin >= &inode_table[0] && pin < &inode_table[NR_INODE]);
 
@@ -76,8 +79,11 @@ PUBLIC int do_rdwt()
 		assert((fs_msg.type == READ) || (fs_msg.type == WRITE));
 
 		int pos_end;
-		if (fs_msg.type == READ)
-			pos_end = min(pos + len, pin->i_size);
+		if (fs_msg.type == READ){
+			len=pin->i_size;
+			//pos_end = min(pos + len, pin->i_size);
+			pos_end=pin->i_size;
+		}
 		else		/* WRITE */
 			pos_end = min(pos + len, pin->i_nr_sects * SECTOR_SIZE);
 

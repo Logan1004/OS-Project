@@ -497,14 +497,13 @@ typedef struct {
     int base;
     double body[MAXSIZE];
 }floStack;
-opStack ops;//存放计算符 
-calStack cals;//存放数字 
-floStack flo;//存放浮点数 
+opStack ops;
+calStack cals;
+floStack flo;
 int A[MAXSIZE];
 double B[MAXSIZE];
 void calculate_int();
 void calculate_float();
-//初始化计算器 
 void calculator_start(){
     int i=0;
     ops.base = -1;
@@ -535,11 +534,11 @@ void transform(int fd_stdin, int fd_stdout){
     int isOver = 0;
     int i = 0;
     int j = 0;
-    int isfloat = 0;//判断是否存在浮点数 
-    int isdigit = 0;//多位数字的判断 
+    int isfloat = 0;
+    int isdigit = 0;
     do{
         if(form[i]<='9'&&form[i]>='0'){
-            if(isdigit==0){//判断上一个符号是否为数字，是则为同一个数 
+            if(isdigit==0){
                 A[j] = form[i]-'0' + 100;
                 i++;j++;
             }else{
@@ -632,7 +631,6 @@ void transform(int fd_stdin, int fd_stdout){
     }
 
 }
-//浮点计算 
 void calculate_float(){
     int i = 0;
     int j = 0;
@@ -640,11 +638,11 @@ void calculate_float(){
     int isdigit = 0;
     int error=0;
     while(isOver==0){
-        if(A[i]>=100){//当前为数字，且为整数 
+        if(A[i]>=100){
             flo.top++;
             flo.body[flo.top] = A[i]-100;
             flo.size++;
-        }else if(A[i]<0){//为数字，且为浮点数 
+        }else if(A[i]<0){
             flo.top++;
             flo.body[flo.top] = B[-A[i]];
             flo.size++;
@@ -709,7 +707,6 @@ void calculate_float(){
         printf("    Result is %lf\n",flo.body[flo.top]);
     }
 }
-//整数计算 
 void calculate_int(){
     int i = 0;
     int j = 0;
@@ -1792,6 +1789,7 @@ void Help()
  *                            Filemanager Begins!
  *****************************************************************************/
 
+
 void FileManager(int fd_stdin,int fd_stdout)
 {
     char curpath[128];
@@ -1800,71 +1798,124 @@ void FileManager(int fd_stdin,int fd_stdout)
 
     char rdbuf[128];
     char cmd[20];
-    char para[100];
-
+    char para[128]="";
+    char para1[128]="";
+    char para2[128]="";
 
 
     while (1) {
         printl("%s:  ", curpath);
+        clearArr(cmd,128);
         clearArr(rdbuf,128);
+        clearArr(para,128);
+        clearArr(para1,128);
+        clearArr(para2,128);
         int r=read(fd_stdin, rdbuf, 128);
         rdbuf[r]=0;
+        cmd[0]=0;
+        para1[0]=0;
+        para2[0]=0;
+        int paracnt=0;
 
         char* lo=rdbuf;
         char* hi=lo;
         while(*hi){
             if(*hi==' '){
-                memcpy(cmd, lo, hi-lo);
-                cmd[hi-lo]=0;
-                hi++; lo=hi;
-                break;
+                if(paracnt==0){
+                    memcpy(cmd, lo, hi-lo);
+                    cmd[hi-lo]=0;
+                    hi++; lo=hi;
+                    paracnt++;
+                }
+                else{
+                    memcpy(para1, lo, hi-lo);
+                    para1[hi-lo]=0;
+                    hi++; lo=hi;
+                    paracnt++;
+                    break;
+                }
             }
             else
                 hi++;
         }
         if(hi!=lo){
-            memcpy(cmd, lo, hi-lo);
-            cmd[hi-lo]=0;
-            //lo=hi;
-            para[0]=0;
+            if(paracnt==0){
+                memcpy(cmd, lo, hi-lo);
+                cmd[hi-lo]=0;
+                //lo=hi;
+                //para[0]=0;
+            }
+            else{
+                memcpy(para1, lo, hi-lo);
+                para1[hi-lo]=0;
+            }
         }
         else{
             while(*hi)
                 hi++;
-            memcpy(para, lo, hi-lo);
-            para[hi-lo]=0;
+            memcpy(para2, lo, hi-lo);
+            para2[hi-lo]=0;
         }
 
-        //printf("%s\n", cmd);
-        //printf("%s\n", para);
+
         if(strcmp(cmd,"ls")==0){
             //printf("dols\n");
             ls("666");
         }
         else if(strcmp(cmd, "touch")==0){
             //printf("dotouch\n");
-            touch(para);
+            touch(para1);
         }
         else if(strcmp(cmd, "mkdir")==0){
             //printf("domkdir\n");
-            mkdir(para);
+            mkdir(para1);
         }
         else if(strcmp(cmd, "rm")==0){
             //printf("dorm\n");
-            rm(para);
+            rm(para1);
         }
         else if(strcmp(cmd, "cd")==0){
             //printf("docd\n");
-            memcpy(curpath, para, strlen(para));
-            curpath[strlen(para)]=0;
-            cd(para);
+            memcpy(curpath, para1, strlen(para1));
+            curpath[strlen(para1)]=0;
+            cd(para1);
+        }
+        else if(strcmp(cmd, "scan")==0){
+            char tembuf[512];
+
+            int fd=open(para1, O_RDWR);
+            int n=read(fd, tembuf, 512);
+            close(fd);
+
+            tembuf[n]=0;
+            printf("%s\n", tembuf);
+        }
+        else if(strcmp(cmd, "vm")==0){
+            char tembuf[512];
+            int fd=open(para1, O_RDWR);
+            int n=read(fd, tembuf, 512);
+            tembuf[n]=0;
+            close(fd);
+            printf("cur content:  %s\n", tembuf);
+            printf("new content:  ");
+
+            fd=open(para1, O_RDWR);
+            char wtbuf[512];
+            int r=read(fd_stdin, wtbuf, 512);
+            wtbuf[r]=0;
+            write(fd, wtbuf, strlen(wtbuf));
+            close(fd);
+        }
+        else if(strcmp(cmd, "mv")==0){
+            mv(para1, para2);
+        }
+        else if(strcmp(cmd, "cp")==0){
+            cp(para1, para2);
         }else if (strcmp(cmd, "quit")==0) {
             break;
         }
     }
-
-
-
+    
 }
 
 
@@ -1885,7 +1936,7 @@ void TestA()
     int fd;
     int i, n;
 
-    char tty_name[] = "/dev_tty0";
+    char tty_name[] = "dev_tty0";
 
     char rdbuf[128];
 
@@ -2124,7 +2175,7 @@ void TestB() {
     char rdbuf[128];
     char cmd[20];
     char para[100];
-    char tty_name[] = "/dev_tty1";
+    char tty_name[] = "dev_tty1";
     int fd_stdin = open(tty_name, O_RDWR);
     assert(fd_stdin == 0);
     int fd_stdout = open(tty_name, O_RDWR);

@@ -46,6 +46,7 @@ struct mess3 {
 	int	m3i2;
 	int	m3i3;
 	int	m3i4;
+	int	m3i5;
 	u64	m3l1;
 	u64	m3l2;
 	void*	m3p1;

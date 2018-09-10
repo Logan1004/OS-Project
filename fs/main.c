@@ -78,6 +78,12 @@ PUBLIC void task_fs()
 		case CD:
 			fs_msg.RETVAL=do_cd();
 			break;
+		case MV:
+			fs_msg.RETVAL=do_mv();
+			break;
+		case CP:
+			fs_msg.RETVAL=do_cp();
+			break;
 		/* case LSEEK: */
 		/* 	fs_msg.OFFSET = do_lseek(); */
 		/* 	break; */
@@ -455,10 +461,11 @@ PUBLIC struct inode * get_inode(int dev, int num)
 	struct inode * p;
 	struct inode * q = 0;
 	for (p = &inode_table[0]; p < &inode_table[NR_INODE]; p++) {
-		if (p->i_cnt) {	/* not a free slot */
+		if (p->i_exist) {	/* not a free slot */
 			if ((p->i_dev == dev) && (p->i_num == num)) {
 				/* this is the inode we want */
-				p->i_cnt++;
+				//p->i_cnt++;
+				p->i_exist=1;
 				return p;
 			}
 		}
@@ -473,7 +480,8 @@ PUBLIC struct inode * get_inode(int dev, int num)
 
 	q->i_dev = dev;
 	q->i_num = num;
-	q->i_cnt = 1;
+	//q->i_cnt = 1;
+	q->i_exist=1;
 
 	struct super_block * sb = get_super_block(dev);
 	int blk_nr = 1 + 1 + sb->nr_imap_sects + sb->nr_smap_sects +
@@ -504,6 +512,8 @@ PUBLIC void put_inode(struct inode * pinode)
 {
 	assert(pinode->i_cnt > 0);
 	pinode->i_cnt--;
+	if(pinode->i_cnt==0)
+		pinode->i_exist=0;
 }
 
 /*****************************************************************************

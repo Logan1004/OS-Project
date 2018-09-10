@@ -24,7 +24,8 @@
 #include "keyboard.h"
 #include "proto.h"
 
-PRIVATE struct inode * create_file(char * path, int flags);
+PRIVATE struct inode * create_file(char * filename, struct inode* dir_inode);
+PRIVATE struct inode * create_dir(char * filename, struct inode* dir_inode);
 PRIVATE int alloc_imap_bit(int dev);
 PRIVATE int alloc_smap_bit(int dev, int nr_sects_to_alloc);
 PRIVATE struct inode * new_inode(int dev, int inode_nr, int start_sect, int type);
@@ -42,17 +43,17 @@ PUBLIC int do_open()
 {
 	int fd = -1;		/* return value */
 
-	char pathname[MAX_PATH];
+	char filename[MAX_PATH];
 
 	/* get parameters from the message */
 	int flags = fs_msg.FLAGS;	/* access mode */
 	int name_len = fs_msg.NAME_LEN;	/* length of filename */
 	int src = fs_msg.source;	/* caller proc nr. */
 	assert(name_len < MAX_PATH);
-	phys_copy((void*)va2la(TASK_FS, pathname),
-		  (void*)va2la(src, fs_msg.PATHNAME),
+	phys_copy((void*)va2la(TASK_FS, filename),
+		  (void*)va2la(src, fs_msg.FILENAME),
 		  name_len);
-	pathname[name_len] = 0;
+	filename[name_len] = 0;
 
 	/* find a free slot in PROCESS::filp[] */
 	int i;
@@ -72,7 +73,7 @@ PUBLIC int do_open()
 	if (i >= NR_FILE_DESC)
 		panic("f_desc_table[] is full (PID:%d)", proc2pid(pcaller));
 
-	int inode_nr = search_file(pathname);
+	int inode_nr = search_file_in_dir(filename, cur_inode);
 
 	struct inode * pin = 0;
 	if (flags & O_CREAT) {
@@ -81,17 +82,18 @@ PUBLIC int do_open()
 			return -1;
 		}
 		else {
-			pin = create_file(pathname, flags);
+			pin = create_file(filename, cur_inode);
 		}
 	}
 	else {
 		assert(flags & O_RDWR);
 
-		char filename[MAX_PATH];
-		struct inode * dir_inode;
-		if (strip_path(filename, pathname, &dir_inode) != 0)
-			return -1;
-		pin = get_inode(dir_inode->i_dev, inode_nr);
+		//char filename[MAX_PATH];
+		//struct inode * dir_inode;
+		//if (strip_path(filename, pathname, &dir_inode) != 0)
+			//return -1;
+		pin = get_inode(root_inode->i_dev, inode_nr);
+		pin->i_cnt++;
 	}
 
 	if (pin) {
@@ -148,24 +150,27 @@ PUBLIC int do_open()
  *
  * @todo return values of routines called, return values of self.
  *****************************************************************************/
-PRIVATE struct inode * create_file(char* filename, int flags)
+PRIVATE struct inode * create_file(char* filename, struct inode* dir_inode)
 {	
 	//struct inode* dir_inode=get_inode(root_inode->i_dev, 6);
-	struct inode * dir_inode=cur_inode;
+	//struct inode * dir_inode=cur_inode;
 	int inode_nr = alloc_imap_bit(dir_inode->i_dev);
+	//printl("%d\n", inode_nr);
 	int free_sect_nr = alloc_smap_bit(dir_inode->i_dev,
 					  NR_DEFAULT_FILE_SECTS);
+	//printl("%d\n", free_sect_nr);
 	struct inode *newino = new_inode(dir_inode->i_dev, inode_nr,
 					 free_sect_nr, I_REGULAR);
-
+	//printl("%d\n", newino->i_num);
 	new_dir_entry(dir_inode, newino->i_num, filename);
+	//printl("come here \n");
 
 	return newino;
 }
 
-PRIVATE struct inode * create_dir(char* filename)
+PRIVATE struct inode * create_dir(char* filename, struct inode* dir_inode)
 {
-	struct inode * dir_inode=cur_inode;
+	//struct inode * dir_inode=cur_inode;
 	int inode_nr = alloc_imap_bit(dir_inode->i_dev);
 	int free_sect_nr = alloc_smap_bit(dir_inode->i_dev,
 					  NR_DEFAULT_FILE_SECTS);
@@ -359,7 +364,7 @@ PRIVATE struct inode * new_inode(int dev, int inode_nr, int start_sect, int type
 	new_inode->i_nr_sects = NR_DEFAULT_FILE_SECTS;
 
 	new_inode->i_dev = dev;
-	new_inode->i_cnt = 1;
+	//new_inode->i_cnt = 1;
 	new_inode->i_num = inode_nr;
 
 	/* write to the inode array */
@@ -414,6 +419,7 @@ PRIVATE void new_dir_entry(struct inode *dir_inode,int inode_nr,char *filename)
 	}
 	if (!new_de) { /* reached the end of the dir */
 		new_de = pde;
+		//printl("6666666666666666666\n");
 		dir_inode->i_size += DIR_ENTRY_SIZE;
 	}
 	new_de->inode_nr = inode_nr;
@@ -475,7 +481,9 @@ PUBLIC int do_ls()
 	struct dir_entry * pde;
     	for (i = 0; i < nr_dir_blks; i++)
     	{
-        	RD_SECT(dir_inode->i_dev, dir_blk0_nr + i);
+		//printl("enter for\n");
+        	RD_SECT(root_inode->i_dev, dir_blk0_nr + i);
+		//printl("rd finish\n");
 
         	pde = (struct dir_entry *)fsbuf;
 
@@ -523,7 +531,7 @@ PUBLIC int do_mkdir()
     filename[name_len] = 0;
     //printl("**********************\n");
     //printl("%s\n", filename);
-    create_dir(filename);
+    create_dir(filename, cur_inode);
     return 0;
 	//if(!result){
 		//printl("Create dir %s fail!\n", pathname);
@@ -559,9 +567,196 @@ PUBLIC int do_touch()
           (void*)va2la(src, fs_msg.FILENAME),
           name_len);
     filename[name_len] = 0;
+    printl("**********************\n");
+    printl("%s\n", filename);
+    printl("%d\n", cur_inode->i_num);
+    printl("**********************\n");
+    create_file(filename, cur_inode);
+    return 0;
+	//if(!result){
+		//printl("Create dir %s fail!\n", pathname);
+		//return -1;
+	//}
+	
+	//printl("Create dir %s success!\n", pathname);
+	//return 0;
+}
+
+
+/*****************************************************************************
+ *                                mv
+ *****************************************************************************/
+/**
+ * Generate a new i-node and write it to disk.
+ * 
+ * @param dev  Home device of the i-node.
+ * @param inode_nr  I-node nr.
+ * @param start_sect  Start sector of the file pointed by the new i-node.
+ * 
+ * @return  Ptr of the new i-node.
+ *****************************************************************************/
+PUBLIC int do_mv()
+{
+    char filename[MAX_PATH];
+    char tarpath[MAX_PATH];
+    /* get parameters from the message */
+    int name_len = fs_msg.NAME_LEN; /* length of filename */
+    int src = fs_msg.source;    /* caller proc nr. */
+    assert(name_len < MAX_PATH);
+
+    phys_copy((void*)va2la(TASK_FS, filename),
+          (void*)va2la(src, fs_msg.FILENAME),
+          name_len);
+    filename[name_len] = 0;
+
+    int path_len = fs_msg.PATH_LEN; /* length of filename */
+    assert(path_len < MAX_PATH);
+
+    phys_copy((void*)va2la(TASK_FS, tarpath),
+          (void*)va2la(src, fs_msg.PATHNAME),
+          path_len);
+    tarpath[path_len] = 0;
+    //printl("***************\n");
+    //printl("%s\n", filename);
+    //printl("%s\n", tarpath);
+    //printl("***************\n");
+    int inode_nr=search_file_in_dir(filename, cur_inode);
+    int tar_inode_nr=search_file_by_path(tarpath);
+    //printl("====================\n");
+    //printl("%d\n", inode_nr);
+    //printl("%d\n", tar_inode_nr);
+    //printl("====================\n");
+    struct inode* tar_inode=get_inode(root_inode->i_dev, tar_inode_nr);
+
+
+    int dir_blk0_nr = cur_inode->i_start_sect;
+    int nr_dir_blks = (cur_inode->i_size + SECTOR_SIZE) / SECTOR_SIZE;
+    int nr_dir_entries =
+	    cur_inode->i_size / DIR_ENTRY_SIZE; /* including unused slots
+						     * (the file has been
+						     * deleted but the slot
+						     * is still there)
+						     */
+    int m = 0;
+    struct dir_entry * pde = 0;
+    int flg = 0;
+    int dir_size = 0;
+    int i=0;
+
+    for (i = 0; i < nr_dir_blks; i++) {
+	    RD_SECT(root_inode->i_dev, dir_blk0_nr + i);
+
+	    pde = (struct dir_entry *)fsbuf;
+	    int j;
+	    for (j = 0; j < SECTOR_SIZE / DIR_ENTRY_SIZE; j++,pde++) {
+		    if (++m > nr_dir_entries)
+			    break;
+
+		    if (pde->inode_nr == inode_nr) {
+			    /* pde->inode_nr = 0; */
+			    memset(pde, 0, DIR_ENTRY_SIZE);
+			    WR_SECT(root_inode->i_dev, dir_blk0_nr + i);
+			    flg = 1;
+			    break;
+		    }
+
+		    if (pde->inode_nr != INVALID_INODE)
+			    dir_size = m*DIR_ENTRY_SIZE;
+	    }
+
+	    if (m > nr_dir_entries || /* all entries have been iterated OR */
+		   flg) /* file is found */
+		    break;
+    }
+    assert(flg);
+    if (m == nr_dir_entries) { /* the file is the last one in the dir */
+	    cur_inode->i_size = dir_size;
+	    sync_inode(tar_inode);
+    }
+
+    new_dir_entry(tar_inode, inode_nr, filename);
+
+
     //printl("**********************\n");
     //printl("%s\n", filename);
-    create_file(filename, O_RDWR);
+    //create_file(filename, cur_inode);
+    return 0;
+	//if(!result){
+		//printl("Create dir %s fail!\n", pathname);
+		//return -1;
+	//}
+	
+	//printl("Create dir %s success!\n", pathname);
+	//return 0;
+}
+
+
+
+
+
+
+
+/*****************************************************************************
+ *                                cp
+ *****************************************************************************/
+/**
+ * Generate a new i-node and write it to disk.
+ * 
+ * @param dev  Home device of the i-node.
+ * @param inode_nr  I-node nr.
+ * @param start_sect  Start sector of the file pointed by the new i-node.
+ * 
+ * @return  Ptr of the new i-node.
+ *****************************************************************************/
+PUBLIC int do_cp()
+{
+    char filename[MAX_PATH];
+    char tarpath[MAX_PATH];
+    /* get parameters from the message */
+    int name_len = fs_msg.NAME_LEN; /* length of filename */
+    int src = fs_msg.source;    /* caller proc nr. */
+    assert(name_len < MAX_PATH);
+
+    phys_copy((void*)va2la(TASK_FS, filename),
+          (void*)va2la(src, fs_msg.FILENAME),
+          name_len);
+    filename[name_len] = 0;
+
+    int path_len = fs_msg.PATH_LEN; /* length of filename */
+    assert(path_len < MAX_PATH);
+
+    phys_copy((void*)va2la(TASK_FS, tarpath),
+          (void*)va2la(src, fs_msg.PATHNAME),
+          path_len);
+    tarpath[path_len] = 0;
+    //printl("***************\n");
+    //printl("%s\n", filename);
+    //printl("%s\n", tarpath);
+    //printl("***************\n");
+    int inode_nr=search_file_in_dir(filename, cur_inode);
+    int tar_inode_nr=search_file_by_path(tarpath);
+    //printl("====================\n");
+    //printl("%d\n", inode_nr);
+    //printl("%d\n", tar_inode_nr);
+    //printl("====================\n");
+
+    struct inode* sr_inode=get_inode(root_inode->i_dev, inode_nr);
+    struct inode* tar_inode=get_inode(root_inode->i_dev, tar_inode_nr);
+    create_file(filename, tar_inode);
+    int ds_inode_nr=search_file_in_dir(filename, tar_inode);
+    struct inode* ds_inode=get_inode(root_inode->i_dev, ds_inode_nr);
+    ds_inode->i_size=sr_inode->i_size;
+    sync_inode(ds_inode);
+    
+    int sr_blk0_nr = sr_inode->i_start_sect;
+    int nr_blks = (sr_inode->i_size + SECTOR_SIZE - 1) / SECTOR_SIZE;
+    int ds_blk0_nr = ds_inode->i_start_sect;
+    int i=0;
+    for (i = 0; i < nr_blks; i++) {
+	RD_SECT(sr_inode->i_dev, sr_blk0_nr + i);
+        WR_SECT(ds_inode->i_dev, ds_blk0_nr + i);
+    }
+    //int nr_ds_blks = (ds_inode->i_size + SECTOR_SIZE - 1) / SECTOR_SIZE;
     return 0;
 	//if(!result){
 		//printl("Create dir %s fail!\n", pathname);

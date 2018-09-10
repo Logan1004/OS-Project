@@ -81,6 +81,8 @@ PUBLIC int		do_close();
 PUBLIC int		do_ls();
 PUBLIC int		do_mkdir();
 PUBLIC int		do_touch();
+PUBLIC int		do_mv();
+PUBLIC int		do_cp();
 
 /* fs/read_write.c */
 PUBLIC int		do_rdwt();

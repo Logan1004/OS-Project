@@ -284,7 +284,7 @@ PRIVATE int rm_file(char* filename, struct inode* dir_inode)
 
 	//if (pin->i_cnt > 1) {	/* the file was opened */
 		//printl("cannot remove file %s, because pin->i_cnt is %d.\n",
-		       //pathname, pin->i_cnt);
+		       //filename, pin->i_cnt);
 		//return -1;
 	//}
 
@@ -368,7 +368,9 @@ PRIVATE int rm_file(char* filename, struct inode* dir_inode)
 	pin->i_nr_sects = 0;
 	sync_inode(pin);
 	/* release slot in inode_table[] */
-	put_inode(pin);
+	//put_inode(pin);
+	pin->i_cnt=0;
+	pin->i_exist=0;
 
 	/************************************************/
 	/* set the inode-nr to 0 in the directory entry */
@@ -404,7 +406,7 @@ PRIVATE int rm_file(char* filename, struct inode* dir_inode)
 			}
 
 			if (pde->inode_nr != INVALID_INODE)
-				dir_size += DIR_ENTRY_SIZE;
+				dir_size = DIR_ENTRY_SIZE*m;
 		}
 
 		if (m > nr_dir_entries || /* all entries have been iterated OR */
