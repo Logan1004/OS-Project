@@ -176,7 +176,7 @@ PRIVATE struct inode * create_dir(char* filename, struct inode* dir_inode)
 					  NR_DEFAULT_FILE_SECTS);
 	struct inode *newino = new_inode(dir_inode->i_dev, inode_nr,
 					 free_sect_nr, I_DIRECTORY);
-	newino->i_mode = I_DIRECTORY;
+	//newino->i_mode = I_DIRECTORY;
 	new_dir_entry(dir_inode, newino->i_num, filename);
 	return newino;
 }
@@ -567,10 +567,10 @@ PUBLIC int do_touch()
           (void*)va2la(src, fs_msg.FILENAME),
           name_len);
     filename[name_len] = 0;
-    printl("**********************\n");
-    printl("%s\n", filename);
-    printl("%d\n", cur_inode->i_num);
-    printl("**********************\n");
+    //printl("**********************\n");
+    //printl("%s\n", filename);
+    //printl("%d\n", cur_inode->i_num);
+    //printl("**********************\n");
     create_file(filename, cur_inode);
     return 0;
 	//if(!result){
